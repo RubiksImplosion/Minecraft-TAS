@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "minecrafttas",
+  "version": "${version}",
+  "name": "Minecraft Tas",
+  "description": "Mod for the creation of tool assisted speedruns",
+  "authors": [
+    "RubiksImplosion"
+  ],
+  "license": "CC0-1.0",
+  "icon": "assets/minecrafttas/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.rubiksimplosion.minecrafttas.Minecrafttas"
+    ]
+  },
+  "mixins": [
+    "minecrafttas.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.7.8+build.184",
+    "fabric": "*",
+    "minecraft": "1.15.2"
+  }
+}
