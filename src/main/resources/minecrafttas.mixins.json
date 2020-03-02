@@ -3,6 +3,10 @@
   "package": "io.github.rubiksimplosion.minecrafttas.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "MixinClientPlayerEntity",
+    "MixinClientPlayNetworkHandler",
+    "MixinCommandSuggestor",
+    "MixinTextFieldWidget"
   ],
   "client": [
   ],

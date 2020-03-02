@@ -12,7 +12,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "io.github.rubiksimplosion.minecrafttas.Minecrafttas"
+      "io.github.rubiksimplosion.minecrafttas.MinecraftTas"
     ]
   },
   "mixins": [
@@ -24,3 +24,5 @@
     "minecraft": "1.15.2"
   }
 }
+
+
