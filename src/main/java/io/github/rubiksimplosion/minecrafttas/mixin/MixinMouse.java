@@ -1,5 +1,6 @@
 package io.github.rubiksimplosion.minecrafttas.mixin;
 
+import io.github.rubiksimplosion.minecrafttas.input.InputManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -16,8 +17,21 @@ public class MixinMouse {
 
     @Inject(method="onMouseButton", at = @At("HEAD"), cancellable = true)
     private void onOnMouseButton(long window, int button, int action, int mods, CallbackInfo ci) {
-        if(MinecraftClient.getInstance().player != null) {
-            MinecraftClient.getInstance().player.addChatMessage(new LiteralText("canceled button input"), false);
+        if(InputManager.getInstance().executing) {
+            ci.cancel();
+        }
+    }
+
+    @Inject(method="onMouseScroll", at = @At("HEAD"), cancellable = true)
+    private void onMouseScroll(long window, double d, double e, CallbackInfo ci) {
+        if(InputManager.getInstance().executing) {
+            ci.cancel();
+        }
+    }
+
+    @Inject(method = "updateMouse", at = @At("HEAD"), cancellable = true)
+    private void onUpdateMouse(CallbackInfo ci) {
+        if (InputManager.getInstance().executing) {
             ci.cancel();
         }
     }

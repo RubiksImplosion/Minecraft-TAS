@@ -1,18 +1,18 @@
 package io.github.rubiksimplosion.minecrafttas.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import io.github.rubiksimplosion.minecrafttas.input.InputManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
 
-import static io.github.rubiksimplosion.minecrafttas.command.ClientCommandManager.*;
-import static net.minecraft.server.command.CommandManager.*;
+import static net.minecraft.server.command.CommandManager.literal;
 
 @Environment(EnvType.CLIENT)
 public class ScriptCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-        addClientSideCommand("script");
+        ClientCommandManager.addClientSideCommand("script");
 
         dispatcher.register(literal("script")
             .then(literal("test")
@@ -20,7 +20,8 @@ public class ScriptCommand {
     }
 
     public static int test(ServerCommandSource source) {
-        source.sendFeedback(new LiteralText("test"), false);
+        source.sendFeedback(new LiteralText("testing"), false);
+        InputManager.getInstance().setExecutingStatus(!InputManager.getInstance().executing);
         return 0;
     }
 }
