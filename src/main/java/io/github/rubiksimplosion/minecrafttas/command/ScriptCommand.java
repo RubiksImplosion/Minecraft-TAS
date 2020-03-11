@@ -1,6 +1,8 @@
 package io.github.rubiksimplosion.minecrafttas.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import io.github.rubiksimplosion.minecrafttas.input.FakeMouse;
+import io.github.rubiksimplosion.minecrafttas.input.InputManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.server.command.ServerCommandSource;
@@ -20,7 +22,8 @@ public class ScriptCommand {
     }
 
     public static int test(ServerCommandSource source) {
-        source.sendFeedback(new LiteralText("test"), false);
+        source.sendFeedback(new LiteralText("testing fake mouse"), false);
+        FakeMouse.fakeMouseButton(0, 1, 0);
         return 0;
     }
 }
