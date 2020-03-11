@@ -6,6 +6,7 @@
     "MixinClientPlayerEntity",
     "MixinClientPlayNetworkHandler",
     "MixinCommandSuggestor",
+    "MixinMouse",
     "MixinTextFieldWidget"
   ],
   "client": [
