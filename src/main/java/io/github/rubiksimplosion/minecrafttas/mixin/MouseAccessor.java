@@ -8,4 +8,10 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 public interface MouseAccessor {
     @Invoker
     void callOnMouseButton(long window, int button, int action, int mods);
+
+    @Invoker
+    void callOnMouseScroll(long window, double d, double e);
+
+    @Invoker
+    void callOnCursorPos(long window, double x, double y);
 }

@@ -12,10 +12,12 @@ import net.minecraft.server.command.ServerCommandSource;
 
 @Environment(EnvType.CLIENT)
 public class MinecraftTas implements ModInitializer {
-    public InputManager inputManager;
+    public static InputManager inputManager;
+    public static ScriptManager scriptManager;
     @Override
     public void onInitialize() {
         inputManager = new InputManager();
+        scriptManager = new ScriptManager();
         TasKeyBindings.registerKeys();
     }
 

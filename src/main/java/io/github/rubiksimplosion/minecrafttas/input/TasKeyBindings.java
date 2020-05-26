@@ -1,5 +1,6 @@
 package io.github.rubiksimplosion.minecrafttas.input;
 
+import io.github.rubiksimplosion.minecrafttas.util.MouseUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.keybinding.FabricKeyBinding;
@@ -30,8 +31,9 @@ public class TasKeyBindings {
     }
 
     public static void onKeyTasTestPressed() {
-        FakeMouse.fakeMouseButton(0, 1, 0);
-        FakeMouse.fakeMouseButton(0,0,0);
+//        FakeMouse.fakeMouseButton(0, 1, 0);
+//        FakeMouse.fakeMouseButton(0,0,0);
+        FakeMouse.fakeCursorMove(MouseUtil.findXFromYaw(80), MouseUtil.findYFromPitch(40));
     }
 
 }
