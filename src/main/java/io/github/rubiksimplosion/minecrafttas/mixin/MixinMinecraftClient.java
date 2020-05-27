@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MixinMinecraftClient {
     @Inject(method = "tick", at = @At("HEAD"))
     private void executeScript(CallbackInfo ci) {
-        if (ScriptManager.executing) {
+        if (MinecraftTas.scriptManager.executing) {
             MinecraftTas.scriptManager.executeNextCommand();
         }
     }

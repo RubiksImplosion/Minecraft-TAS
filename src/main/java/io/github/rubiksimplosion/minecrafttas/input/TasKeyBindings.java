@@ -6,7 +6,9 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.keybinding.FabricKeyBinding;
 import net.fabricmc.fabric.api.client.keybinding.KeyBindingRegistry;
 import net.fabricmc.fabric.api.event.client.ClientTickCallback;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
@@ -42,11 +44,12 @@ public class TasKeyBindings {
     }
 
     public static void onKeyTasTestPressed() {
-        FakeMouse.fakeMouseButton(1, 1, 0);
-        FakeMouse.fakeMouseButton(1,0,0);
+        FakeMouse.fakeMouseButton(1, 1);
+        FakeMouse.fakeMouseButton(1,0);
     }
 
     public static void onKeyEmergencyStopPressed() {
+        MinecraftClient.getInstance().player.addChatMessage(new LiteralText("Stopped executing script"), false);
         MinecraftTas.scriptManager.stop();
     }
 }

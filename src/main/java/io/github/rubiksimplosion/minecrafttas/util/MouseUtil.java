@@ -28,42 +28,42 @@ public class MouseUtil {
     }
 
     public static void clickAttack() {
-        FakeMouse.fakeMouseButton(0, 1, 0);
-        FakeMouse.fakeMouseButton(0, 0, 0);
+        FakeMouse.fakeMouseButton(0, 1);
+        FakeMouse.fakeMouseButton(0, 0);
     }
 
     public static void holdAttack() {
-        FakeMouse.fakeMouseButton(0, 1, 0);
+        FakeMouse.fakeMouseButton(0, 1);
     }
 
     public static void releaseAttack() {
-        FakeMouse.fakeMouseButton(0, 0, 0);
+        FakeMouse.fakeMouseButton(0, 0);
     }
 
     public static void clickUse() {
-        FakeMouse.fakeMouseButton(1, 1, 0);
-        FakeMouse.fakeMouseButton(1, 0, 0);
+        FakeMouse.fakeMouseButton(1, 1);
+        FakeMouse.fakeMouseButton(1, 0);
     }
 
     public static void holdUse() {
-        FakeMouse.fakeMouseButton(1, 1, 0);
+        FakeMouse.fakeMouseButton(1, 1);
     }
 
     public static void releaseUse() {
-        FakeMouse.fakeMouseButton(1, 0, 0);
+        FakeMouse.fakeMouseButton(1, 0);
     }
 
     public static void clickPickItem() {
-        FakeMouse.fakeMouseButton(2, 1, 0);
-        FakeMouse.fakeMouseButton(2, 0, 0);
+        FakeMouse.fakeMouseButton(2, 1);
+        FakeMouse.fakeMouseButton(2, 0);
     }
 
     public static void holdPickItem() {
-        FakeMouse.fakeMouseButton(2, 1, 0);
+        FakeMouse.fakeMouseButton(2, 1);
     }
 
     public static void releasePickItem() {
-        FakeMouse.fakeMouseButton(2, 0, 0);
+        FakeMouse.fakeMouseButton(2, 0);
     }
 
     public static void scrollUp(double amount) {

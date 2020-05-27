@@ -1,5 +1,6 @@
 package io.github.rubiksimplosion.minecrafttas.mixin;
 
+import io.github.rubiksimplosion.minecrafttas.MinecraftTas;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Mouse;
@@ -14,24 +15,30 @@ public class MixinMouse {
 
     @Inject(method="onMouseButton", at = @At("HEAD"), cancellable = true)
     private void onOnMouseButton(long window, int button, int action, int mods, CallbackInfo ci) {
-        if (false) {
-            ci.cancel();
-        }
+//        if (MinecraftTas.scriptManager.executing) {
+//            if (!MinecraftTas.scriptManager.fakeInput) {
+//                ci.cancel();
+//            }
+//        }
     }
 
     @Inject(method="onMouseScroll", at = @At("HEAD"), cancellable = true)
     private void onMouseScroll(long window, double d, double e, CallbackInfo ci) {
-        if (false) {
-            ci.cancel();
-        }
+//        if (MinecraftTas.scriptManager.executing) {
+//            if (!MinecraftTas.scriptManager.fakeInput) {
+//                ci.cancel();
+//            }
+//        }
     }
 
 
     @Inject(method = "onCursorPos", at = @At("HEAD"), cancellable = true)
     private void onOnCursorPos(long window, double x, double y, CallbackInfo ci) {
-        if (false) {
-            ci.cancel();
-        }
+//        if (MinecraftTas.scriptManager.executing) {
+//            if (!MinecraftTas.scriptManager.fakeInput) {
+//                ci.cancel();
+//            }
+//        }
     }
 
 //    @Inject(method = "updateMouse", at = @At("HEAD"), cancellable = true)

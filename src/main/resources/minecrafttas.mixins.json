@@ -3,9 +3,11 @@
   "package": "io.github.rubiksimplosion.minecrafttas.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "KeyboardAccessor",
     "MixinClientPlayerEntity",
     "MixinClientPlayNetworkHandler",
     "MixinCommandSuggestor",
+    "MixinKeyboard",
     "MixinMinecraftClient",
     "MixinMouse",
     "MixinTextFieldWidget",
