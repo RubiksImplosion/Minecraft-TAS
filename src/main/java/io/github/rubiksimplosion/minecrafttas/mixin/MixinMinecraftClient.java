@@ -1,7 +1,7 @@
 package io.github.rubiksimplosion.minecrafttas.mixin;
 
 import io.github.rubiksimplosion.minecrafttas.MinecraftTas;
-import io.github.rubiksimplosion.minecrafttas.ScriptManager;
+import io.github.rubiksimplosion.minecrafttas.script.ScriptManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;

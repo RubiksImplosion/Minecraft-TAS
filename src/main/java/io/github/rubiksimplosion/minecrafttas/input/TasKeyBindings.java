@@ -1,12 +1,11 @@
 package io.github.rubiksimplosion.minecrafttas.input;
 
-import io.github.rubiksimplosion.minecrafttas.util.MouseUtil;
+import io.github.rubiksimplosion.minecrafttas.MinecraftTas;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.keybinding.FabricKeyBinding;
 import net.fabricmc.fabric.api.client.keybinding.KeyBindingRegistry;
 import net.fabricmc.fabric.api.event.client.ClientTickCallback;
-import net.minecraft.client.options.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
@@ -17,10 +16,15 @@ public class TasKeyBindings {
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_H,
             "tas").build();
-
+    public static FabricKeyBinding keyScriptStop = FabricKeyBinding.Builder.create(new Identifier("minecrafttas", "stop"),
+            InputUtil.Type.KEYSYM,
+            GLFW.GLFW_KEY_P,
+            "tas").build();
     public static void registerKeys() {
         KeyBindingRegistry.INSTANCE.addCategory("tas");
         KeyBindingRegistry.INSTANCE.register(keyTasTest);
+        KeyBindingRegistry.INSTANCE.register(keyScriptStop);
+
         ClientTickCallback.EVENT.register(e ->
         {
             if(keyTasTest.wasPressed()) {
@@ -28,12 +32,21 @@ public class TasKeyBindings {
 
             }
         });
+
+        ClientTickCallback.EVENT.register(e ->
+        {
+            if (keyScriptStop.wasPressed()) {
+                onKeyEmergencyStopPressed();
+            }
+        });
     }
 
     public static void onKeyTasTestPressed() {
-//        FakeMouse.fakeMouseButton(0, 1, 0);
-//        FakeMouse.fakeMouseButton(0,0,0);
-        FakeMouse.fakeCursorMove(MouseUtil.findXFromYaw(80), MouseUtil.findYFromPitch(40));
+        FakeMouse.fakeMouseButton(1, 1, 0);
+        FakeMouse.fakeMouseButton(1,0,0);
     }
 
+    public static void onKeyEmergencyStopPressed() {
+        MinecraftTas.scriptManager.stop();
+    }
 }
