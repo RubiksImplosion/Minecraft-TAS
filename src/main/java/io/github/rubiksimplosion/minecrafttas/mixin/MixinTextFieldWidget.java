@@ -10,5 +10,5 @@ public abstract class MixinTextFieldWidget implements ITextFieldWidget {
 
     @Accessor("maxLength")
     @Override
-    public abstract int clientcommands_getMaxLength();
+    public abstract int minecrafttas_getMaxCommandLength();
 }

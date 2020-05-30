@@ -41,7 +41,7 @@ public class MixinCommandSuggestor {
 
         if (isClientCommand && !wasClientCommand) {
             wasClientCommand = true;
-            oldMaxLength = ((ITextFieldWidget) textField).clientcommands_getMaxLength();
+            oldMaxLength = ((ITextFieldWidget) textField).minecrafttas_getMaxCommandLength();
             textField.setMaxLength(Math.max(oldMaxLength, 32500));
         } else if (!isClientCommand && wasClientCommand) {
             wasClientCommand = false;

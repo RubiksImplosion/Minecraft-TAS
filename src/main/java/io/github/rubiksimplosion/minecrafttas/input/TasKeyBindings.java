@@ -22,23 +22,27 @@ public class TasKeyBindings {
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_P,
             "tas").build();
+    public static FabricKeyBinding keyScriptStart = FabricKeyBinding.Builder.create(new Identifier("minecrafttas", "start"),
+            InputUtil.Type.KEYSYM,
+            GLFW.GLFW_KEY_O,
+            "tas").build();
+
     public static void registerKeys() {
         KeyBindingRegistry.INSTANCE.addCategory("tas");
         KeyBindingRegistry.INSTANCE.register(keyTasTest);
         KeyBindingRegistry.INSTANCE.register(keyScriptStop);
+        KeyBindingRegistry.INSTANCE.register(keyScriptStart);
 
         ClientTickCallback.EVENT.register(e ->
         {
             if(keyTasTest.wasPressed()) {
                 onKeyTasTestPressed();
-
             }
-        });
-
-        ClientTickCallback.EVENT.register(e ->
-        {
-            if (keyScriptStop.wasPressed()) {
-                onKeyEmergencyStopPressed();
+            else if (keyScriptStop.wasPressed()) {
+                onKeyTasStopPressed();
+            }
+            else if (keyScriptStart.wasPressed()) {
+                onKeyTasStartPressed();
             }
         });
     }
@@ -48,8 +52,13 @@ public class TasKeyBindings {
         FakeMouse.fakeMouseButton(1,0);
     }
 
-    public static void onKeyEmergencyStopPressed() {
+    public static void onKeyTasStopPressed() {
         MinecraftClient.getInstance().player.addChatMessage(new LiteralText("Stopped executing script"), false);
         MinecraftTas.scriptManager.stop();
+    }
+
+    public static void onKeyTasStartPressed() {
+        MinecraftClient.getInstance().player.addChatMessage(new LiteralText("Started executing script"), false);
+        MinecraftTas.scriptManager.start();
     }
 }

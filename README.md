@@ -53,3 +53,8 @@ For example the command `+forward; +sprint` would begin pressing forward and spr
 *Player input has been implemented by directly simulating mouse/keyboard movements. Due to this there can be slight inconsistencies
 with things such as player camera movement due to the math related to mouse sensitivity. For the most accurate player camera movement
 set your in-game sensitivity to the lowest value.
+
+
+## Notes
+
+This mod is a work in progress. Expect things to be buggy and have limited functionality for the time being.
