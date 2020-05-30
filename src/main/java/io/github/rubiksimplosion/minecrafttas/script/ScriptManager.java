@@ -8,6 +8,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.LiteralText;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Arrays;
@@ -15,10 +16,11 @@ import java.util.regex.Pattern;
 
 @Environment(EnvType.CLIENT)
 public class ScriptManager {
+    public static final File scriptDirectory = new File((MinecraftClient.getInstance().runDirectory.getPath() + "scripts\\").replace(".", ""));
     public boolean executing = false;
     public boolean fakeInput = false;
     /**
-     * Controls the keyboard and mouse input modifiers
+     * Controls the keyboard and mouse input modifiers (shift, control, alt; other input modifiers are not relevant to minecraft)
      */
     public int modifiers = 0;
     private String[] script;
@@ -27,7 +29,7 @@ public class ScriptManager {
 
     public void setScript(String scriptName) {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("C:/Script/" + scriptName + ".script"));
+            BufferedReader reader = new BufferedReader(new FileReader(scriptDirectory + "\\" + scriptName + ".script"));
             script = reader.lines()
                     .toArray(String[]::new);
         } catch (FileNotFoundException e) {
