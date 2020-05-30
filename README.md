@@ -21,6 +21,8 @@ A mod for creating tool assisted speedruns of Minecraft.
 
 ### Available commands:
  
+ `wait <ticks>` pauses execution of the script for the given number of ticks 
+ 
 `yaw <value>` - Sets the player's yaw to the specified value*
  
 `pitch <value>` - Sets the player's pitch to the specified value*
@@ -48,13 +50,13 @@ A mod for creating tool assisted speedruns of Minecraft.
 `+jump|-jump` - Presses and releases the jump key respectively
 
 Insert a semicolon `;` between commands on the same line to execute them both on the same tick
-For example the command `+forward; +sprint` would begin pressing forward and sprint on the same tick.
+For example, the command `+forward; +sprint` would begin pressing forward and sprint on the same tick.
 
 *Player input has been implemented by directly simulating mouse/keyboard movements. Due to this there can be slight inconsistencies
 with things such as player camera movement due to the math related to mouse sensitivity. For the most accurate player camera movement
 set your in-game sensitivity to the lowest value.
 
 
-## Notes
+### Note
 
 This mod is a work in progress. Expect things to be buggy and have limited functionality for the time being.
