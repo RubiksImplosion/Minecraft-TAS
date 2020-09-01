@@ -15,6 +15,7 @@ A mod for creating tool assisted speedruns of Minecraft.
 ## Usage
 1. Create a text document in the `.minecraft/scripts` folder and rename the extension to ".script"
 1. Add the commands in chronological order. Each new line is executed 1 tick after the previous line.
+1. Example scipts can be found in the scripts folder
 1. Load scripts with the `/script set <script name>` command, it will autocomplete the names of valid script files
 1. Start and stop scripts with the `/script start` command, or alternatively by pressing the start script keybind (default `O`)
 1. Start and stop scripts with the `/script stop` command, or alternatively by pressing the stop script keybind (default `P`)
