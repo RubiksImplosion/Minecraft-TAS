@@ -1,0 +1,70 @@
++attack;-attack
+yaw 0; pitch 90
+yaw 10; pitch 80
+yaw 20; pitch 70
+yaw 30; pitch 60
+yaw 40; pitch 50
+yaw 50; pitch 40
+yaw 60; pitch 30
+yaw 70; pitch 20
+yaw 80; pitch 10
+yaw 90; pitch 0
+yaw 100; pitch -10
+yaw 110; pitch -20
+yaw 120; pitch -30
+yaw 130; pitch -40
+yaw 140; pitch -50
+yaw 150; pitch -60
+yaw 160; pitch -70
+yaw 170; pitch -80
+yaw 180; pitch -90
+yaw -170; pitch -80
+yaw -160; pitch -70
+yaw -150; pitch -60
+yaw -140; pitch -50
+yaw -130; pitch -40
+yaw -120; pitch -30
+yaw -110; pitch -20
+yaw -100; pitch -10
+yaw -90; pitch -5
+yaw -80; pitch -4.5
+yaw -70; pitch -4
+yaw -60; pitch -3.5
+yaw -50; pitch -3
+yaw -40; pitch -2.5
+yaw -30; pitch -2
+yaw -20; pitch -1.5
+yaw -10; pitch -1
+yaw 0; pitch -0.5
+wait 10
+yaw 0; pitch 30
+wait 10
++pickitem;-pickitem
+wait 10
++attack;-attack
+wait 10
++use;-use
+wait 10
++use
+wait 10
+-use
+wait 10
++attack
+wait 10
+-attack
+wait 10
+scrollup 1
+scrollup 1
+scrollup 1
+scrollup 1
+scrollup 1
+wait 5
+scrolldown 1
+scrolldown 1
+scrolldown 1
+scrolldown 1
+scrolldown 1
+wait 5
+scrollup 2
+wait 5
+scrolldown 2

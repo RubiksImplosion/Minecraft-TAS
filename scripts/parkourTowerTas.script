@@ -1,0 +1,157 @@
+yaw -38; pitch 45
+yaw -38; pitch 45; +forward; +sprint; +jump
+wait 25
+-forward
+wait 5
++forward
+wait 5
+yaw -135
+wait 5
+yaw -175
+wait 15
+yaw 160
+wait 10
+yaw -50; -forward
+wait 15
++forward; yaw -90; +sneak
+wait 35
+yaw 135; -sneak; +sprint; +jump
+wait 20
+yaw 90
+wait 12
+yaw 0; -jump
+wait 30
++jump
+-jump
+wait 5
+yaw -55
+wait 3
++jump
+wait 7
+yaw -100; -jump
+wait 10
++jump
+wait 10
+yaw 180
+wait 20
+yaw -160
+wait 19
+yaw 85; -jump
+wait 3
++jump
+wait 3
+-forward
+wait 2
++forward; yaw 60
+wait 20
+yaw 175
+wait 10
+-jump
+wait 10
+yaw -170; +jump
+-jump
+wait 4
+yaw -80
+wait 3
++jump
+-jump
+wait 15
++jump
+-jump
+wait 20
+yaw 0
+wait 5
++jump
+-jump
+wait 15
+yaw 15;+sneak
+-sneak
+wait 5
++jump
+-jump
+wait 10
+yaw 135
+wait 3
++jump
+-jump
+wait 5
+yaw -180
+wait 6
+yaw 120
+wait 1
++jump;yaw 90
+wait 1
+yaw 45;-jump
+wait 1
+yaw 0
+wait 4
+yaw -45
+wait 4
+yaw -90; +jump
+-jump
++right
+-right
+wait 17
+yaw -60;+jump
+-jump
+wait 22
+yaw 180;
+wait 1
++jump
+-jump
++jump
+yaw 130
+wait 5
+yaw 160
+wait 15
+yaw 90
+wait 4
+yaw 0; -jump
+wait 10
++jump
+wait 15
+yaw 40; -jump
+wait 8
++jump
+-jump
+wait 10
+yaw 140
+wait 1
++jump
+-jump
+wait 10
+yaw 120
++jump
+-jump
+wait 5
+yaw 140
+wait 3
++jump
+-jump
+wait 5
+yaw -125
+wait 2
++jump
+-jump
+wait 10
+yaw -90
+wait 10
+yaw -115
++jump
+-jump
+wait 5
+yaw 0
+wait 3
++jump
+wait 20
+-jump; yaw -10
+wait 13
++jump
+-jump
+yaw 5
+wait 100
+yaw 90
+wait 10
+yaw 180
+wait 10
+-forward; -sneak; -sprint; -jump
