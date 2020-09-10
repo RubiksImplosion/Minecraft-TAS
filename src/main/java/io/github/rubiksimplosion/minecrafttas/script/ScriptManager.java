@@ -72,7 +72,7 @@ public class ScriptManager {
         if (Pattern.matches("wait \\d+", command)) {
             waitTimer = Integer.parseInt(command.split(" ")[1]);
         } else {
-            MinecraftClient.getInstance().player.addChatMessage(new LiteralText(command), false);
+            MinecraftClient.getInstance().player.sendMessage(new LiteralText(command), false);
         }
         //Mouse
         if (Pattern.matches("yaw -?\\d+\\.?\\d*", command)) {
@@ -149,6 +149,11 @@ public class ScriptManager {
         else if (Pattern.matches("-right", command)) {
             KeyboardUtil.releaseRight();
         }
-
+        else if (Pattern.matches("\\+autojump", command)) {
+            //TO IMPLEMENT
+        }
+        else if (Pattern.matches("-autojump", command)) {
+            //TO IMPLEMENT
+        }
     }
 }

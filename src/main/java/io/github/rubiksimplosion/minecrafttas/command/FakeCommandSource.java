@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Environment(EnvType.CLIENT)
 public class FakeCommandSource extends ServerCommandSource {
     public FakeCommandSource(ClientPlayerEntity player) {
-        super(player, player.getPosVector(), player.getRotationClient(), null, 0, player.getEntityName(), player.getName(), null, player);
+        super(player, player.getPos(), player.getRotationClient(), null, 0, player.getEntityName(), player.getName(), null, player);
     }
 
     @Override
