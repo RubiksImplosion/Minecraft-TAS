@@ -17,10 +17,10 @@ import org.lwjgl.glfw.GLFW;
 
 @Environment(EnvType.CLIENT)
 public class TasKeyBindings {
-    public static KeyBinding keyTasTest = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.minecrafttas.test",
-            InputUtil.Type.KEYSYM,
-            GLFW.GLFW_KEY_H,
-            "category.minecrafttas.tas"));
+//    public static KeyBinding keyTasTest = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.minecrafttas.test",
+//            InputUtil.Type.KEYSYM,
+//            GLFW.GLFW_KEY_H,
+//            "category.minecrafttas.tas"));
     public static KeyBinding keyScriptStop = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.minecrafttas.script.stop",
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_P,
@@ -31,11 +31,11 @@ public class TasKeyBindings {
             "category.minecrafttas.tas"));
 
     public static void registerKeys() {
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            while (keyTasTest.wasPressed()) {
-                onKeyTasTestPressed();
-            }
-        });
+//        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+//            while (keyTasTest.wasPressed()) {
+//                onKeyTasTestPressed();
+//            }
+//        });
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (keyScriptStart.wasPressed()) {
                 onKeyTasStartPressed();
@@ -48,18 +48,22 @@ public class TasKeyBindings {
         });
     }
 
-    public static void onKeyTasTestPressed() {
-        FakeMouse.fakeMouseButton(1, 1);
-        FakeMouse.fakeMouseButton(1,0);
-    }
+//    public static void onKeyTasTestPressed() {
+//        FakeMouse.fakeMouseButton(1, 1);
+//        FakeMouse.fakeMouseButton(1,0);
+//    }
 
     public static void onKeyTasStopPressed() {
-        MinecraftClient.getInstance().player.sendMessage(new LiteralText("Stopped executing script"), false);
-        MinecraftTas.scriptManager.stop();
+        if (MinecraftTas.scriptManager.executing) {
+            MinecraftClient.getInstance().player.sendMessage(new LiteralText("Stopped executing script"), false);
+            MinecraftTas.scriptManager.stop();
+        }
     }
 
     public static void onKeyTasStartPressed() {
-        MinecraftClient.getInstance().player.sendMessage(new LiteralText("Started executing script"), false);
-        MinecraftTas.scriptManager.start();
+        if (!MinecraftTas.scriptManager.executing) {
+            MinecraftClient.getInstance().player.sendMessage(new LiteralText("Started executing script"), false);
+            MinecraftTas.scriptManager.start();
+        }
     }
 }

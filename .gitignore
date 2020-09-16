@@ -4,10 +4,16 @@
 build/
 out/
 classes/
-logs/
+
 # idea
 
-.idea/
+!.idea/
+.idea/*
+!.idea/inspectionProfiles/
+!.idea/codeStyles/
+.idea/codeStyles/*
+!.idea/codeStyles/Project.xml
+!.idea/fileTemplates/
 *.iml
 *.ipr
 *.iws
@@ -22,4 +28,7 @@ bin/
 
 # fabric
 
-run/
+run/*
+!run/.gitkeep
+credentials.properties
+changelog.txt

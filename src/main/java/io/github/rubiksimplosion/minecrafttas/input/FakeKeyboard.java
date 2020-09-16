@@ -18,11 +18,18 @@ public class FakeKeyboard {
     public static void fakeOnKey(int key, int action) {
         MinecraftTas.scriptManager.fakeInput = true;
         MinecraftClient.getInstance().keyboard.onKey(
-                MinecraftClient.getInstance().getWindow().getHandle(), key, GLFW.glfwGetKeyScancode(key), action, MinecraftTas.scriptManager.modifiers);
+                MinecraftClient.getInstance().getWindow().getHandle(),
+                key,
+                GLFW.glfwGetKeyScancode(key),
+                action,
+                MinecraftTas.scriptManager.modifiers);
 
         MinecraftTas.scriptManager.fakeInput = false;
     }
     public static void fakeOnChar(int i, int j) {
-        ((KeyboardAccessor) MinecraftClient.getInstance().keyboard).callOnChar(MinecraftClient.getInstance().getWindow().getHandle(), i, j);
+        ((KeyboardAccessor) MinecraftClient.getInstance().keyboard).callOnChar(
+                MinecraftClient.getInstance().getWindow().getHandle(),
+                i,
+                j);
     }
 }

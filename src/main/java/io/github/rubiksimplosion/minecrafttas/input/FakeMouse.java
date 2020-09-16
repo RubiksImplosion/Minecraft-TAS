@@ -16,21 +16,30 @@ public class FakeMouse {
     public static void fakeMouseButton(int button, int action) {
         MinecraftTas.scriptManager.fakeInput = true;
         ((MouseAccessor)MinecraftClient.getInstance().mouse).callOnMouseButton(
-                MinecraftClient.getInstance().getWindow().getHandle(), button, action, MinecraftTas.scriptManager.modifiers);
+                MinecraftClient.getInstance().getWindow().getHandle(),
+                button,
+                action,
+                MinecraftTas.scriptManager.modifiers);
         MinecraftTas.scriptManager.fakeInput = false;
     }
 
     /** MWHEELUP is positive dir, MWHEELDOWN is negative dir */
     public static void fakeMouseScroll(double direction) {
         MinecraftTas.scriptManager.fakeInput = true;
-        ((MouseAccessor)MinecraftClient.getInstance().mouse).callOnMouseScroll(MinecraftClient.getInstance().getWindow().getHandle(), 0, direction);
+        ((MouseAccessor)MinecraftClient.getInstance().mouse).callOnMouseScroll(
+                MinecraftClient.getInstance().getWindow().getHandle(),
+                0,
+                direction);
         MinecraftTas.scriptManager.fakeInput = false;
 
     }
 
     public static void fakeCursorMove(double x, double y) {
         MinecraftTas.scriptManager.fakeInput = true;
-        ((MouseAccessor)MinecraftClient.getInstance().mouse).callOnCursorPos(MinecraftClient.getInstance().getWindow().getHandle(), x, y);
+        ((MouseAccessor)MinecraftClient.getInstance().mouse).callOnCursorPos(
+                MinecraftClient.getInstance().getWindow().getHandle(),
+                x,
+                y);
         MinecraftTas.scriptManager.fakeInput = false;
     }
 }

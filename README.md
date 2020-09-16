@@ -16,8 +16,8 @@ A mod for creating tool assisted speedruns of Minecraft.
 1. Create a text document in the `.minecraft/scripts` folder and rename the extension to ".script"
 1. Add the commands in chronological order. Each new line is executed 1 tick after the previous line. Example scipts can be found in the scripts folder
 1. Load scripts with the `/script set <script name>` command, it will autocomplete the names of valid script files
-1. Start and stop scripts with the `/script start` command, or alternatively by pressing the start script keybind (default `O`)
-1. Start and stop scripts with the `/script stop` command, or alternatively by pressing the stop script keybind (default `P`)
+1. Start and stop scripts with the `/script start` command, or by pressing the start script keybind (default `O`)
+1. Start and stop scripts with the `/script stop` command, or by pressing the stop script keybind (default `P`)
 
 ### Available commands:
  
@@ -25,6 +25,8 @@ A mod for creating tool assisted speedruns of Minecraft.
  
 `yaw <value>` - Sets the player's yaw to the specified value*
  
+`+autojump|-autojump` - Enables automatic jumping the moment the player hits the ground
+
 `pitch <value>` - Sets the player's pitch to the specified value*
 
 `scrollup <value>` - Scrolls the mouse wheel up the given amount
@@ -49,6 +51,12 @@ A mod for creating tool assisted speedruns of Minecraft.
 
 `+jump|-jump` - Presses and releases the jump key respectively
 
+`+drop|-drop` - Presses and releases the drop item key respectively
+
+`+inventory|-inventory` - Presses and releases the open inventory key respectively
+
+`+swaphand|-swaphand` - Presses and releases the key to swap hands respectively
+
 Insert a semicolon `;` between commands on the same line to execute them both on the same tick
 For example, the command `+forward; +sprint` would begin pressing forward and sprint on the same tick.
 
@@ -57,6 +65,25 @@ with things such as player camera movement due to the math related to mouse sens
 set your in-game sensitivity to the lowest value.
 
 
-### Note
+### Notes
+
+- Buffered Inputs
+    - Attack
+    - Use
+    - Pick Item
+    - Scroll up/down
+    - Drop Item
+    - Swap Hand
+    - Open Inventory
+    
+    
+- Non Buffered Inputs
+    - Forward
+    - Backward
+    - Left
+    - Right
+    - Jump
+    - Sneak
+    - Sprint
 
 This mod is a work in progress. Expect things to be buggy and have limited functionality for the time being.

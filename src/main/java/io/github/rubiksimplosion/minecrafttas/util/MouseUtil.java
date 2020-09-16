@@ -32,7 +32,7 @@ public class MouseUtil {
         FakeMouse.fakeMouseButton(0, 0);
     }
 
-    public static void holdAttack() {
+    public static void pressAttack() {
         FakeMouse.fakeMouseButton(0, 1);
     }
 
@@ -45,7 +45,7 @@ public class MouseUtil {
         FakeMouse.fakeMouseButton(1, 0);
     }
 
-    public static void holdUse() {
+    public static void pressUse() {
         FakeMouse.fakeMouseButton(1, 1);
     }
 
@@ -58,7 +58,7 @@ public class MouseUtil {
         FakeMouse.fakeMouseButton(2, 0);
     }
 
-    public static void holdPickItem() {
+    public static void pressPickItem() {
         FakeMouse.fakeMouseButton(2, 1);
     }
 
