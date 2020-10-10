@@ -1,6 +1,7 @@
 package io.github.rubiksimplosion.minecrafttas.input;
 
 import io.github.rubiksimplosion.minecrafttas.MinecraftTas;
+import io.github.rubiksimplosion.minecrafttas.script.ScriptManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -49,7 +50,7 @@ public class TasKeyBindings {
     }
 
     public static void onKeyTasTestPressed() {
-
+        MinecraftClient.getInstance().player.sendMessage(new LiteralText(ScriptManager.scriptDirectory.getPath()), false);
     }
 
     public static void onKeyTasStopPressed() {

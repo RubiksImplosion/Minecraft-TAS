@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 
 @Environment(EnvType.CLIENT)
 public class ScriptManager {
-    public static final File scriptDirectory = new File((MinecraftClient.getInstance().runDirectory.getPath() + "scripts\\").replace(".", ""));
+    public static final File scriptDirectory = new File(MinecraftClient.getInstance().runDirectory.getPath() + "\\scripts\\");
     public boolean executing = false;
     public boolean fakeInput = false;
     /**
