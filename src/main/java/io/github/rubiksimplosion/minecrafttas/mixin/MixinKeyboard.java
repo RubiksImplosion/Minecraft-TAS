@@ -15,11 +15,21 @@ public class MixinKeyboard {
 
     @Inject(method = "onKey", at = @At("HEAD"), cancellable = true)
     private void onOnKey(long window, int key, int scancode, int i, int j, CallbackInfo ci) {
-//        if (MinecraftTas.scriptManager.executing) {
-//            if (!MinecraftTas.scriptManager.fakeInput) {
-//                ci.cancel();
-//            }
-//        }
+        if (MinecraftTas.scriptManager.executing) {
+            int keyTest = ((KeyBindingAccessor)KeyBindingAccessor
+                    .getKeysById()
+                    .get("key.minecrafttas.test"))
+                    .getBoundKey()
+                    .getCode();
+            int keyStop = ((KeyBindingAccessor)KeyBindingAccessor
+                    .getKeysById()
+                    .get("key.minecrafttas.script.stop"))
+                    .getBoundKey()
+                    .getCode();
+            if (!MinecraftTas.scriptManager.fakeInput && key != keyStop && key != keyTest) {
+                ci.cancel();
+            }
+        }
     }
 
     @Inject(method = "onChar", at = @At("HEAD"))

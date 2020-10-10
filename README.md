@@ -23,19 +23,21 @@ A mod for creating tool assisted speedruns of Minecraft.
  
  `wait <ticks>` pauses execution of the script for the given number of ticks 
  
-`yaw <value>` - Sets the player's yaw to the specified value*
- 
 `+autojump|-autojump` - Enables automatic jumping the moment the player hits the ground
 
+`yaw <value>` - Sets the player's yaw to the specified value*
+ 
 `pitch <value>` - Sets the player's pitch to the specified value*
 
 `scrollup <value>` - Scrolls the mouse wheel up the given amount
 
 `scrolldown <value>` - Scrolls the mouse wheel down the given amount
 
-`+attack|-attack` - Presses or releases the Attack/Destroy key respectively
+`+attack|-attack` - Presses and releases the Attack/Destroy key respectively
 
-`+use|-use` - Presses or releases the Use/Place key respectively
+`+use|-use` - Presses and releases the Use/Place key respectively
+
+`+pickitem|-pickitem` - Presses and releases the pick item key respectively
 
 `+forward|-forward` - Pressed and releases the forward strafe key respectively
 
@@ -57,6 +59,15 @@ A mod for creating tool assisted speedruns of Minecraft.
 
 `+swaphand|-swaphand` - Presses and releases the key to swap hands respectively
 
+`+hotbar<1-9>|-hotbar<1-9>` - Presses and releases the specified hotbar key respectively
+
+`+chat|-chat` - Presses and releases that chat key respectively
+
+`+command|-command` - Presses and releases the command key respectively
+
+`+escape|-escape` - Presses and releases the escape key respectively
+
+
 Insert a semicolon `;` between commands on the same line to execute them both on the same tick
 For example, the command `+forward; +sprint` would begin pressing forward and sprint on the same tick.
 
@@ -74,7 +85,7 @@ set your in-game sensitivity to the lowest value.
     - Scroll up/down
     - Drop Item
     - Swap Hand
-    - Open Inventory
+    - Inventory
     
     
 - Non Buffered Inputs
@@ -85,5 +96,6 @@ set your in-game sensitivity to the lowest value.
     - Jump
     - Sneak
     - Sprint
-
+    - Hotbar
+    
 This mod is a work in progress. Expect things to be buggy and have limited functionality for the time being.

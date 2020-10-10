@@ -1,8 +1,8 @@
 package io.github.rubiksimplosion.minecrafttas.script;
 
+import io.github.rubiksimplosion.minecrafttas.input.FakeMouse;
 import io.github.rubiksimplosion.minecrafttas.util.COMMAND_TYPES;
-import io.github.rubiksimplosion.minecrafttas.util.KeyboardUtil;
-import io.github.rubiksimplosion.minecrafttas.util.MouseUtil;
+import io.github.rubiksimplosion.minecrafttas.util.InputUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -34,15 +34,14 @@ public class ScriptManager {
 
     private final Map<String, COMMAND_TYPES> commandToCommandType = new HashMap<>();
     private final Map<String, COMMAND_TYPES> specialToCommandType = new HashMap<>();
+
     public ScriptManager() {
-        //mouse
         commandToCommandType.put("+attack", COMMAND_TYPES.ATTACK_PRESS);
         commandToCommandType.put("-attack", COMMAND_TYPES.ATTACK_RELEASE);
         commandToCommandType.put("+use", COMMAND_TYPES.USE_PRESS);
         commandToCommandType.put("-use", COMMAND_TYPES.USE_RELEASE);
         commandToCommandType.put("+pickitem", COMMAND_TYPES.PICK_ITEM_PRESS);
         commandToCommandType.put("-pickitem", COMMAND_TYPES.PICK_ITEM_RELEASE);
-        //keyboard
         commandToCommandType.put("+jump", COMMAND_TYPES.JUMP_PRESS);
         commandToCommandType.put("-jump", COMMAND_TYPES.JUMP_RELEASE);
         commandToCommandType.put("+sneak", COMMAND_TYPES.SNEAK_PRESS);
@@ -63,6 +62,12 @@ public class ScriptManager {
         commandToCommandType.put("-inventory", COMMAND_TYPES.INVENTORY_RELEASE);
         commandToCommandType.put("+swaphand", COMMAND_TYPES.SWAP_HAND_PRESS);
         commandToCommandType.put("-swaphand", COMMAND_TYPES.SWAP_HAND_RELEASE);
+        commandToCommandType.put("+chat", COMMAND_TYPES.CHAT_PRESS);
+        commandToCommandType.put("-chat", COMMAND_TYPES.CHAT_RELEASE);
+        commandToCommandType.put("+command", COMMAND_TYPES.COMMAND_PRESS);
+        commandToCommandType.put("-command", COMMAND_TYPES.COMMAND_RELEASE);
+        commandToCommandType.put("+escape", COMMAND_TYPES.ESCAPE_PRESS);
+        commandToCommandType.put("-escape", COMMAND_TYPES.ESCAPE_RELEASE);
         //special
         specialToCommandType.put("+autojump", COMMAND_TYPES.AUTO_JUMP_ENABLE);
         specialToCommandType.put("-autojump", COMMAND_TYPES.AUTO_JUMP_DISABLE);
@@ -82,7 +87,6 @@ public class ScriptManager {
         if (script != null) {
             executing = true;
             waitTimer = 1;
-            MinecraftClient.getInstance().player.sendMessage(new LiteralText("started"), false);
         }
     }
 
@@ -90,7 +94,7 @@ public class ScriptManager {
         executing = false;
         commandIndex = 0;
         waitTimer = 0;
-        MinecraftClient.getInstance().player.sendMessage(new LiteralText("stopped"), false);
+        MinecraftClient.getInstance().player.sendMessage(new LiteralText("Script execution finished"), false);
     }
 
     public void setupTick() {
@@ -117,38 +121,44 @@ public class ScriptManager {
     public void executeTick() {
         while (specialInputQueue.size() > 0) {
             switch (specialInputQueue.remove()) {
-                case AUTO_JUMP_ENABLE: KeyboardUtil.enableAutoJump(); break;
-                case AUTO_JUMP_DISABLE: KeyboardUtil.disableAutoJump(); break;
+                case AUTO_JUMP_ENABLE: InputUtil.enableAutoJump(); break;
+                case AUTO_JUMP_DISABLE: InputUtil.disableAutoJump(); break;
             }
         }
         while (keyInputQueue.size() > 0) {
             switch (keyInputQueue.remove()) {
-                case ATTACK_PRESS: MouseUtil.pressAttack(); break;
-                case ATTACK_RELEASE: MouseUtil.releaseAttack(); break;
-                case USE_PRESS: MouseUtil.pressUse(); break;
-                case USE_RELEASE: MouseUtil.releaseUse(); break;
-                case PICK_ITEM_PRESS: MouseUtil.pressPickItem(); break;
-                case PICK_ITEM_RELEASE: MouseUtil.releasePickItem(); break;
-                case JUMP_PRESS: KeyboardUtil.pressJump(); break;
-                case JUMP_RELEASE: KeyboardUtil.releaseJump(); break;
-                case SNEAK_PRESS: KeyboardUtil.pressSneak(); break;
-                case SNEAK_RELEASE: KeyboardUtil.releaseSneak(); break;
-                case SPRINT_PRESS: KeyboardUtil.pressSprint(); break;
-                case SPRINT_RELEASE: KeyboardUtil.releaseSprint(); break;
-                case FORWARD_PRESS: KeyboardUtil.pressForward(); break;
-                case FORWARD_RELEASE: KeyboardUtil.releaseForward(); break;
-                case LEFT_PRESS: KeyboardUtil.pressLeft(); break;
-                case LEFT_RELEASE: KeyboardUtil.releaseLeft(); break;
-                case RIGHT_PRESS: KeyboardUtil.pressRight(); break;
-                case RIGHT_RELEASE: KeyboardUtil.releaseRight(); break;
-                case BACKWARD_PRESS: KeyboardUtil.pressBack(); break;
-                case BACKWARD_RELEASE: KeyboardUtil.releaseBack(); break;
-                case DROP_PRESS: KeyboardUtil.pressDrop(); break;
-                case DROP_RELEASE: KeyboardUtil.releaseDrop(); break;
-                case INVENTORY_PRESS: KeyboardUtil.pressInventory(); break;
-                case INVENTORY_RELEASE: KeyboardUtil.releaseInventory(); break;
-                case SWAP_HAND_PRESS: KeyboardUtil.pressSwapHand(); break;
-                case SWAP_HAND_RELEASE: KeyboardUtil.releaseSwapHand(); break;
+                case ATTACK_PRESS: InputUtil.pressAttack(); break;
+                case ATTACK_RELEASE: InputUtil.releaseAttack(); break;
+                case USE_PRESS: InputUtil.pressUse(); break;
+                case USE_RELEASE: InputUtil.releaseUse(); break;
+                case PICK_ITEM_PRESS: InputUtil.pressPickItem(); break;
+                case PICK_ITEM_RELEASE: InputUtil.releasePickItem(); break;
+                case JUMP_PRESS: InputUtil.pressJump(); break;
+                case JUMP_RELEASE: InputUtil.releaseJump(); break;
+                case SNEAK_PRESS: InputUtil.pressSneak(); break;
+                case SNEAK_RELEASE: InputUtil.releaseSneak(); break;
+                case SPRINT_PRESS: InputUtil.pressSprint(); break;
+                case SPRINT_RELEASE: InputUtil.releaseSprint(); break;
+                case FORWARD_PRESS: InputUtil.pressForward(); break;
+                case FORWARD_RELEASE: InputUtil.releaseForward(); break;
+                case LEFT_PRESS: InputUtil.pressLeft(); break;
+                case LEFT_RELEASE: InputUtil.releaseLeft(); break;
+                case RIGHT_PRESS: InputUtil.pressRight(); break;
+                case RIGHT_RELEASE: InputUtil.releaseRight(); break;
+                case BACKWARD_PRESS: InputUtil.pressBack(); break;
+                case BACKWARD_RELEASE: InputUtil.releaseBack(); break;
+                case DROP_PRESS: InputUtil.pressDrop(); break;
+                case DROP_RELEASE: InputUtil.releaseDrop(); break;
+                case INVENTORY_PRESS: InputUtil.pressInventory(); break;
+                case INVENTORY_RELEASE: InputUtil.releaseInventory(); break;
+                case SWAP_HAND_PRESS: InputUtil.pressSwapHand(); break;
+                case SWAP_HAND_RELEASE: InputUtil.releaseSwapHand(); break;
+                case CHAT_PRESS: InputUtil.pressChat(); break;
+                case CHAT_RELEASE: InputUtil.releaseChat(); break;
+                case COMMAND_PRESS: InputUtil.pressCommand(); break;
+                case COMMAND_RELEASE: InputUtil.releaseCommand(); break;
+                case ESCAPE_PRESS: InputUtil.pressEscape(); break;
+                case ESCAPE_RELEASE: InputUtil.releaseEscape(); break;
                 default:
                     throw new RuntimeException("Unknown input in input queue");
             }
@@ -168,16 +178,32 @@ public class ScriptManager {
         }
         //Mouse
         else if (Pattern.matches("yaw -?\\d+\\.?\\d*", command)) {
-            MouseUtil.changeYaw(Double.parseDouble(command.split(" ")[1]));
+            InputUtil.changeYaw(Double.parseDouble(command.split(" ")[1]));
         }
         else if (Pattern.matches("pitch -?\\d+\\.?\\d*", command)) {
-            MouseUtil.changePitch(Double.parseDouble(command.split(" ")[1]));
+            InputUtil.changePitch(Double.parseDouble(command.split(" ")[1]));
         }
         else if (Pattern.matches("scrollup \\d+", command)) {
-            MouseUtil.scrollUp(Double.parseDouble(command.split(" ")[1]));
+            for (int i = 0; i < Integer.parseInt(command.split(" ")[1]); i++) {
+                FakeMouse.fakeMouseScroll(1.0);
+            }
         }
         else if (Pattern.matches("scrolldown \\d+", command)) {
-            MouseUtil.scrollDown(Double.parseDouble(command.split(" ")[1]));
+            for (int i = 0; i < Integer.parseInt(command.split(" ")[1]); i++) {
+                FakeMouse.fakeMouseScroll(-1.0);
+            }
+        }
+        else if (Pattern.matches("\\+hotbar\\d", command)) {
+            int slot = Integer.parseInt(command.substring(7, 8));
+            if (slot != 0) {
+                InputUtil.pressHotbar(slot);
+            }
+        }
+        else if (Pattern.matches("-hotbar\\d", command)) {
+            int slot = Integer.parseInt(command.substring(7, 8));
+            if (slot != 0) {
+                InputUtil.releaseHotbar(slot);
+            }
         }
     }
 }
@@ -204,3 +230,51 @@ Else
 Use key held down logic ("ex: hold use on door")
 Block breaking
 */
+
+/*
+//done
+key.hotbar.1
+key.hotbar.2
+key.hotbar.3
+key.hotbar.4
+key.hotbar.5
+key.hotbar.6
+key.hotbar.7
+key.hotbar.8
+key.hotbar.9
+key.attack
+key.use
+key.pickItem
+key.forward
+key.back
+key.left
+key.right
+key.sneak
+key.sprint
+key.jump
+key.inventory
+key.drop
+key.swapOffhand
+key.chat
+key.command
+
+scroll
+escape
+
+F3 (debug menu)
+F4 (shader)*
+narrator*
+debug crash*
+key.playerlist
+key.saveToolbarActivator*
+key.loadToolbarActivator*
+key.screenshot
+key.togglePerspective
+key.smoothCamera
+key.fullscreen*
+
+key.advancements
+key.spectatorOutlines*
+
+ *very low priority
+ */

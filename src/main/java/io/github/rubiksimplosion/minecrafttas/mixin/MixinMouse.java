@@ -15,30 +15,30 @@ public class MixinMouse {
 
     @Inject(method="onMouseButton", at = @At("HEAD"), cancellable = true)
     private void onOnMouseButton(long window, int button, int action, int mods, CallbackInfo ci) {
-//        if (MinecraftTas.scriptManager.executing) {
-//            if (!MinecraftTas.scriptManager.fakeInput) {
-//                ci.cancel();
-//            }
-//        }
+        if (MinecraftTas.scriptManager.executing) {
+            if (!MinecraftTas.scriptManager.fakeInput) {
+                ci.cancel();
+            }
+        }
     }
 
     @Inject(method="onMouseScroll", at = @At("HEAD"), cancellable = true)
     private void onMouseScroll(long window, double d, double e, CallbackInfo ci) {
-//        if (MinecraftTas.scriptManager.executing) {
-//            if (!MinecraftTas.scriptManager.fakeInput) {
-//                ci.cancel();
-//            }
-//        }
+        if (MinecraftTas.scriptManager.executing) {
+            if (!MinecraftTas.scriptManager.fakeInput) {
+                ci.cancel();
+            }
+        }
     }
 
 
     @Inject(method = "onCursorPos", at = @At("HEAD"), cancellable = true)
     private void onOnCursorPos(long window, double x, double y, CallbackInfo ci) {
-//        if (MinecraftTas.scriptManager.executing) {
-//            if (!MinecraftTas.scriptManager.fakeInput) {
-//                ci.cancel();
-//            }
-//        }
+        if (MinecraftTas.scriptManager.executing) {
+            if (!MinecraftTas.scriptManager.fakeInput) {
+                ci.cancel();
+            }
+        }
     }
 
 //    @Inject(method = "updateMouse", at = @At("HEAD"), cancellable = true)

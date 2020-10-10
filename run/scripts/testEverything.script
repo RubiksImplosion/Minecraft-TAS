@@ -1,0 +1,63 @@
++autojump
+wait 20
+-autojump
++hotbar1
+-hotbar1
++hotbar2
+-hotbar2
++hotbar3
+-hotbar3
++hotbar4
+-hotbar4
++hotbar5
+-hotbar5
++hotbar6
+-hotbar6
++hotbar7
+-hotbar7
++hotbar8
+-hotbar8
++hotbar9
+-hotbar9
++attack
+-attack
++use
+-use
++pickitem
+-pickitem
++sneak
+-sneak
++forward
+-forward
++left
+-left
++right
+-right
++back
+-back
++sprint
+-sprint
++jump
+-jump
++drop
+-drop
++swaphand
+-swaphand
++inventory
+-inventory
++inventory
+-inventory
+yaw 0
+pitch 0
+scrollup 3
+scrolldown 3
++chat
+-chat
++escape
+-escape
++command
+-command
++escape
+-escape
++escape
+-escape
