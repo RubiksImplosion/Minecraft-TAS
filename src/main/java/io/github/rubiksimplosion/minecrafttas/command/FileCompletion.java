@@ -21,7 +21,7 @@ import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Text;
+//import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Text;
 
 @Environment(EnvType.CLIENT)
 public class FileCompletion {

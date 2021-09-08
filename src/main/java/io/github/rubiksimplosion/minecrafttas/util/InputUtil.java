@@ -12,13 +12,13 @@ public class InputUtil {
     public static boolean autoJumpEnabled = false;
 
     public static int findXFromYaw(double newYaw) {
-        float oldYaw = MinecraftClient.getInstance().player.yaw;
+        float oldYaw = MinecraftClient.getInstance().player.getYaw();
         double sens = MinecraftClient.getInstance().options.mouseSensitivity * 0.6 + 0.2;
         return (int)(((float)newYaw - oldYaw)/(0.15*8*sens*sens*sens) + MinecraftClient.getInstance().mouse.getX());
     }
 
     public static int findYFromPitch(double newPitch) {
-        float oldPitch = MinecraftClient.getInstance().player.pitch;
+        float oldPitch = MinecraftClient.getInstance().player.getPitch();
         double sens = MinecraftClient.getInstance().options.mouseSensitivity * 0.6 + 0.2;
         return (int)(((float)newPitch - oldPitch)/(0.15*8*sens*sens*sens) + MinecraftClient.getInstance().mouse.getY());
     }
@@ -238,5 +238,3 @@ public class InputUtil {
         }
     }
 }
-
-//Create InputUtil that combines MouseUtil and KeyboardUtil due to unexpected mouse or keyboard bind conflicts

@@ -10,78 +10,80 @@ buildscript {
     }
 }
 plugins {
-    id 'fabric-loom' version '0.4-SNAPSHOT'
+    id 'fabric-loom' version '0.9-SNAPSHOT'
     id 'maven-publish'
 }
 
 
-import com.google.gson.GsonBuilder
-import com.mojang.authlib.Agent
-import com.mojang.authlib.properties.PropertyMap
-import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
+//import com.google.gson.GsonBuilder
+//import com.mojang.authlib.Agent
+//import com.mojang.authlib.properties.PropertyMap
+//import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService
 
 task setupRealMcAccount {
     group = 'ide'
     doLast {
-        def username = project.ext.credentials['minecraftUser']
-        def password = project.ext.credentials['minecraftPass']
-        def auth = new YggdrasilAuthenticationService(Proxy.NO_PROXY, '1').createUserAuthentication(Agent.MINECRAFT)
-        auth.username = username
-        auth.password = password
-        auth.logIn()
-        def accessToken = auth.authenticatedToken
-        def uuid = auth.selectedProfile.id.toString().replace('-', '')
-        username = auth.selectedProfile.name
-        def userType = auth.userType.name
-        def userProperties = new GsonBuilder().registerTypeAdapter(PropertyMap, new PropertyMap.Serializer()).create().toJson(auth.userProperties)
-
-        def categories = [:]
-        def category
-        minecraft.devLauncherConfig.eachLine { line ->
-            if (!line.empty && Character.isWhitespace(line.charAt(0))) {
-                category << line.trim()
-            } else {
-                category = []
-                categories[line] = category
-            }
-        }
-        def clientArgs = categories['clientArgs']
-
-        for (def i = 0; i < clientArgs.size(); i += 2) {
-            if (clientArgs[i] == '--accessToken' || clientArgs[i] == '--uuid' || clientArgs[i] == '--username' || clientArgs[i] == '--userType' || clientArgs[i] == '--userProperties') {
-                clientArgs.remove(i)
-                clientArgs.remove(i)
-                i -= 2
-            }
-        }
-
-        clientArgs << '--accessToken'
-        clientArgs << accessToken
-        clientArgs << '--uuid'
-        clientArgs << uuid
-        clientArgs << '--username'
-        clientArgs << username
-        clientArgs << '--userType'
-        clientArgs << userType
-        clientArgs << '--userProperties'
-        clientArgs << userProperties
-
-        def pw = minecraft.devLauncherConfig.newPrintWriter()
-        for (def ctgy : categories.keySet()) {
-            pw.println ctgy
-            for (def val : categories[ctgy]) {
-                pw.println('\t' + val)
-            }
-        }
-        pw.flush()
+//        def username = project.ext.credentials['minecraftUser']
+//        def password = project.ext.credentials['minecraftPass']
+//        def auth = new YggdrasilAuthenticationService(Proxy.NO_PROXY, '1').createUserAuthentication(Agent.MINECRAFT)
+//        auth.username = username
+//        auth.password = password
+//        auth.logIn()
+//        def accessToken = auth.authenticatedToken
+//        def uuid = auth.selectedProfile.id.toString().replace('-', '')
+//        username = auth.selectedProfile.name
+//        def userType = auth.userType.name
+//        def userProperties = new GsonBuilder().registerTypeAdapter(PropertyMap, new PropertyMap.Serializer()).create().toJson(auth.userProperties)
+//
+//        def categories = [:]
+//        def category
+//        minecraft.devLauncherConfig.eachLine { line ->
+//            if (!line.empty && Character.isWhitespace(line.charAt(0))) {
+//                category << line.trim()
+//            } else {
+//                category = []
+//                categories[line] = category
+//            }
+//        }
+//        def clientArgs = categories['clientArgs']
+//
+//        for (def i = 0; i < clientArgs.size(); i += 2) {
+//            if (clientArgs[i] == '--accessToken' || clientArgs[i] == '--uuid' || clientArgs[i] == '--username' || clientArgs[i] == '--userType' || clientArgs[i] == '--userProperties') {
+//                clientArgs.remove(i)
+//                clientArgs.remove(i)
+//                i -= 2
+//            }
+//        }
+//
+//        clientArgs << '--accessToken'
+//        clientArgs << accessToken
+//        clientArgs << '--uuid'
+//        clientArgs << uuid
+//        clientArgs << '--username'
+//        clientArgs << username
+//        clientArgs << '--userType'
+//        clientArgs << userType
+//        clientArgs << '--userProperties'
+//        clientArgs << userProperties
+//
+//        def pw = minecraft.devLauncherConfig.newPrintWriter()
+//        for (def ctgy : categories.keySet()) {
+//            pw.println ctgy
+//            for (def val : categories[ctgy]) {
+//                pw.println('\t' + val)
+//            }
+//        }
+//        pw.flush()
     }
 }
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
+
 
 minecraft {
 }
@@ -93,44 +95,44 @@ try {
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:1.16.3"
-    mappings "net.fabricmc:yarn:1.16.3+build.1:v2"
-    modImplementation "net.fabricmc:fabric-loader:0.9.3+build.207"
+    minecraft "com.mojang:minecraft:1.17.1"
+    mappings "net.fabricmc:yarn:1.17.1+build.59:v2"
+    modImplementation "net.fabricmc:fabric-loader:0.11.6"
 
     //Fabric api
-    modImplementation "net.fabricmc.fabric-api:fabric-api:0.20.2+build.402-1.16"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:0.40.0+1.17"
 }
 
 processResources {
     inputs.property "version", project.version
 
-    from(sourceSets.main.resources.srcDirs) {
-        include "fabric.mod.json"
+    filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "fabric.mod.json"
-    }
 }
 
-// ensure that the encoding is set to UTF-8, no matter what the system default is
-// this fixes some edge cases with special characters not displaying correctly
-// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
+tasks.withType(JavaCompile).configureEach {
+    // ensure that the encoding is set to UTF-8, no matter what the system default is
+    // this fixes some edge cases with special characters not displaying correctly
+    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+    // If Javadoc is generated, this must be specified in that task too.
+    it.options.encoding = "UTF-8"
+
+    // Minecraft 1.17 (21w19a) upwards uses Java 16.
+    it.options.release = 16
 }
 
-// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-// if it is present.
-// If you remove this task, sources will not be generated.
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = "sources"
-    from sourceSets.main.allSource
+java {
+    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+    // if it is present.
+    // If you remove this line, sources will not be generated.
+    withSourcesJar()
 }
 
 jar {
-    from "LICENSE"
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}"}
+    }
 }
 
 // configure the maven publication
@@ -147,10 +149,12 @@ publishing {
         }
     }
 
-    // select the repositories you want to publish to
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
-        // uncomment to publish to the local maven
-        // mavenLocal()
+        // Add repositories to publish to here.
+        // Notice: This block does NOT have the same function as the block in the top level.
+        // The repositories here will be used for publishing your artifact, not for
+        // retrieving dependencies.
     }
 }
 

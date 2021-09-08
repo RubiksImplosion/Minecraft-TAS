@@ -14,10 +14,13 @@ A mod for creating tool assisted speedruns of Minecraft.
    
 ## Usage
 1. Create a text document in the `.minecraft/scripts` folder and rename the extension to ".script"
-1. Add the commands in chronological order. Each new line is executed 1 tick after the previous line. Example scipts can be found in the scripts folder
-1. Load scripts with the `/script set <script name>` command, it will autocomplete the names of valid script files
-1. Start and stop scripts with the `/script start` command, or by pressing the start script keybind (default `O`)
-1. Start and stop scripts with the `/script stop` command, or by pressing the stop script keybind (default `P`)
+2. Add the commands in chronological order. Each new line is executed 1 tick after the previous line. Example scipts can be found in the scripts folder
+3. Load scripts with the `/script set <script name>` command, it will autocomplete the names of valid script files
+4. Start scripts with the `/script start` command, or by pressing the start script keybind (default `O`)
+5. Stop scripts with the `/script stop` command, or by pressing the stop script keybind (default `P`)
+6. Create a save-state by pressing the create save-state keybind (default `J`)
+7. Load a save-state by pressing the load save-state keybind (default `K`)
+8. Delete a save-state by pressing the delete save-state keybind (default `'`/`APOSTROPHE`)
 
 ### Available commands:
  
