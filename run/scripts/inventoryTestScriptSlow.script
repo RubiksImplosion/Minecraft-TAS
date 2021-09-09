@@ -1,0 +1,30 @@
++inventory; -inventory
+wait 10
+slot 36; +leftmouse; -leftmouse
+wait 10
+slot 1; +rightmouse; -rightmouse
+wait 10
+slot 36; +leftmouse; -leftmouse
+wait 10
+slot 0; +leftmouse; -leftmouse; +rightmouse
+wait 10
+slot 1
+wait 10
+slot 2
+wait 10
+slot 3
+wait 10
+slot 4; -rightmouse;
+wait 10
+slot 0; +leftmouse; -leftmouse
+wait 10
+slot 37; +leftmouse; -leftmouse
+wait 10
++inventory; -inventory
+wait 10
++hotbar2; -hotbar2
+wait 10
+pitch 35
+wait 10
++use; -use
+wait 10

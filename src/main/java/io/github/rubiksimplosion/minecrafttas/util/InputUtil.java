@@ -3,8 +3,16 @@ package io.github.rubiksimplosion.minecrafttas.util;
 import io.github.rubiksimplosion.minecrafttas.MinecraftTas;
 import io.github.rubiksimplosion.minecrafttas.input.FakeKeyboard;
 import io.github.rubiksimplosion.minecrafttas.input.FakeMouse;
+import io.github.rubiksimplosion.minecrafttas.mixin.HandledScreenAccessor;
 import io.github.rubiksimplosion.minecrafttas.mixin.KeyBindingAccessor;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.screen.slot.Slot;
+import net.minecraft.util.Hand;
+
+import java.util.List;
 
 import static net.minecraft.client.util.InputUtil.*;
 
@@ -23,6 +31,38 @@ public class InputUtil {
         return (int)(((float)newPitch - oldPitch)/(0.15*8*sens*sens*sens) + MinecraftClient.getInstance().mouse.getY());
     }
 
+    public static void moveMouseToSlot(int slotId) {
+        Slot slot = ((HandledScreen)MinecraftClient.getInstance().currentScreen).getScreenHandler().getSlot(slotId);
+
+        int x = ((HandledScreenAccessor)MinecraftClient.getInstance().currentScreen).getX() + slot.x;
+        x = x * MinecraftClient.getInstance().getWindow().getWidth() / MinecraftClient.getInstance().getWindow().getScaledWidth();
+
+        int y = ((HandledScreenAccessor)MinecraftClient.getInstance().currentScreen).getY() + slot.y;
+        y = y * MinecraftClient.getInstance().getWindow().getHeight() / MinecraftClient.getInstance().getWindow().getScaledHeight();
+
+        FakeMouse.fakeCursorMove(x, y);
+    }
+
+    public static void pressMouseButton(int button) {
+        FakeMouse.fakeMouseButton(button, 1);
+    }
+
+    public static void releaseMouseButton(int button) {
+        FakeMouse.fakeMouseButton(button, 0);
+    }
+
+    public static void pressLeftShift() {
+        FakeKeyboard.fakeOnKey(340, 1);
+    }
+    public static void releaseLeftShift() {
+        FakeKeyboard.fakeOnKey(340, 0);
+    }
+    public static void pressLeftControl() {
+        FakeKeyboard.fakeOnKey(341, 1);
+    }
+    public static void releaseLeftControl() {
+        FakeKeyboard.fakeOnKey(341, 0);
+    }
     public static void changeYaw(double yaw) {
         FakeMouse.fakeCursorMove(findXFromYaw(yaw), MinecraftClient.getInstance().mouse.getY());
     }

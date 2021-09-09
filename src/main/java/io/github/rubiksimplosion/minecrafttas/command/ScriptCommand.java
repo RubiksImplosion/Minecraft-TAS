@@ -2,16 +2,11 @@ package io.github.rubiksimplosion.minecrafttas.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import io.github.rubiksimplosion.minecrafttas.MinecraftTas;
-import io.github.rubiksimplosion.minecrafttas.script.ScriptManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
-import org.lwjgl.glfw.GLFW;
-
-import java.io.File;
-import java.util.Arrays;
+import net.minecraft.text.TranslatableText;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
@@ -26,10 +21,10 @@ public class ScriptCommand {
         dispatcher.register(literal("script")
             .then(literal("test")
                 .executes(ctx -> test(ctx.getSource())))
-            .then(literal("set")
+            .then(literal("load")
                 .then(argument("name", string())
                     .suggests(FileCompletion.fileList())
-                        .executes(ctx -> set(ctx.getSource(), getString(ctx, "name")))))
+                        .executes(ctx -> load(ctx.getSource(), getString(ctx, "name")))))
             .then(literal("start")
                 .executes(ctx -> start(ctx.getSource())))
             .then(literal("stop")
@@ -40,20 +35,20 @@ public class ScriptCommand {
         return 0;
     }
 
-    public static int set(ServerCommandSource source, String name) {
-        source.sendFeedback(new LiteralText("Settting script"), false);
+    public static int load(ServerCommandSource source, String name) {
         MinecraftTas.scriptManager.setScript(name);
+        source.sendFeedback(new TranslatableText("commands.script.load", name), false);
         return 0;
     }
 
     public static int start(ServerCommandSource source) {
-        source.sendFeedback(new LiteralText("Started executing script"), false);
+        source.sendFeedback(new TranslatableText("commands.script.start"), false);
         MinecraftTas.scriptManager.start();
         return 0;
     }
 
     public static int stop(ServerCommandSource source) {
-        source.sendFeedback(new LiteralText("Stopped executing script"), false);
+        source.sendFeedback(new TranslatableText("commands.script.stop"), false);
         MinecraftTas.scriptManager.stop();
         return 0;
     }

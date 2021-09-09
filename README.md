@@ -15,7 +15,7 @@ A mod for creating tool assisted speedruns of Minecraft.
 ## Usage
 1. Create a text document in the `.minecraft/scripts` folder and rename the extension to ".script"
 2. Add the commands in chronological order. Each new line is executed 1 tick after the previous line. Example scipts can be found in the scripts folder
-3. Load scripts with the `/script set <script name>` command, it will autocomplete the names of valid script files
+3. Load scripts with the `/script load <script name>` command, it will autocomplete the names of valid script files
 4. Start scripts with the `/script start` command, or by pressing the start script keybind (default `O`)
 5. Stop scripts with the `/script stop` command, or by pressing the stop script keybind (default `P`)
 6. Create a save-state by pressing the create save-state keybind (default `J`)
@@ -64,15 +64,29 @@ A mod for creating tool assisted speedruns of Minecraft.
 
 `+hotbar<1-9>|-hotbar<1-9>` - Presses and releases the specified hotbar key respectively
 
-`+chat|-chat` - Presses and releases that chat key respectively
+`+chat|-chat` - Presses and releases the chat key respectively
 
 `+command|-command` - Presses and releases the command key respectively
 
 `+escape|-escape` - Presses and releases the escape key respectively
 
+`+leftmouse|-leftmouse` - Presses and releases the left mouse button respectively
+
+`+rightmouse|-rightmouse` - Presses and releases the right mouse button respectively
+
+`+middlemouse|-middlemouse` - Presses and releases the middle mouse button respectively
+
+`+leftshift|-leftshift` - Presses and releases left shift respectively
+
+`+leftcontrol|-leftcontrol` - Presses and releases left control respectively
+
+`slot <id>` - Moves the mouse over the given slot in an inventory.
+
 
 Insert a semicolon `;` between commands on the same line to execute them both on the same tick
 For example, the command `+forward; +sprint` would begin pressing forward and sprint on the same tick.
+
+For a list of slot ids, visit https://wiki.vg/Inventory
 
 *Player input has been implemented by directly simulating mouse/keyboard movements. Due to this there can be slight inconsistencies
 with things such as player camera movement due to the math related to mouse sensitivity. For the most accurate player camera movement

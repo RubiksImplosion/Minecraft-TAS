@@ -34,6 +34,7 @@ public class MixinMouse {
 
     @Inject(method = "onCursorPos", at = @At("HEAD"), cancellable = true)
     private void onOnCursorPos(long window, double x, double y, CallbackInfo ci) {
+//        System.out.println("x: " + x + ", y: " + y);
         if (MinecraftTas.scriptManager.executing) {
             if (!MinecraftTas.scriptManager.fakeInput) {
                 ci.cancel();

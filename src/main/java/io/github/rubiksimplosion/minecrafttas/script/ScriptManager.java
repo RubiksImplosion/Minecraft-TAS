@@ -68,6 +68,16 @@ public class ScriptManager {
         commandToCommandType.put("-command", COMMAND_TYPES.COMMAND_RELEASE);
         commandToCommandType.put("+escape", COMMAND_TYPES.ESCAPE_PRESS);
         commandToCommandType.put("-escape", COMMAND_TYPES.ESCAPE_RELEASE);
+        commandToCommandType.put("+leftmouse", COMMAND_TYPES.LEFT_MOUSE_PRESS);
+        commandToCommandType.put("-leftmouse", COMMAND_TYPES.LEFT_MOUSE_RELEASE);
+        commandToCommandType.put("+rightmouse", COMMAND_TYPES.RIGHT_MOUSE_PRESS);
+        commandToCommandType.put("-rightmouse", COMMAND_TYPES.RIGHT_MOUSE_RELEASE);
+        commandToCommandType.put("+middlemouse", COMMAND_TYPES.MIDDLE_MOUSE_PRESS);
+        commandToCommandType.put("-middlemouse", COMMAND_TYPES.MIDDLE_MOUSE_RELEASE);
+        commandToCommandType.put("+leftshift", COMMAND_TYPES.LEFT_SHIFT_PRESS);
+        commandToCommandType.put("-leftshift", COMMAND_TYPES.LEFT_SHIFT_RELEASE);
+        commandToCommandType.put("+leftcontrol", COMMAND_TYPES.LEFT_CONTROL_PRESS);
+        commandToCommandType.put("-leftcontrol", COMMAND_TYPES.LEFT_CONTROL_RELEASE);
         //special
         specialToCommandType.put("+autojump", COMMAND_TYPES.AUTO_JUMP_ENABLE);
         specialToCommandType.put("-autojump", COMMAND_TYPES.AUTO_JUMP_DISABLE);
@@ -159,6 +169,16 @@ public class ScriptManager {
                 case COMMAND_RELEASE: InputUtil.releaseCommand(); break;
                 case ESCAPE_PRESS: InputUtil.pressEscape(); break;
                 case ESCAPE_RELEASE: InputUtil.releaseEscape(); break;
+                case LEFT_MOUSE_PRESS: InputUtil.pressMouseButton(0); break;
+                case LEFT_MOUSE_RELEASE: InputUtil.releaseMouseButton(0); break;
+                case RIGHT_MOUSE_PRESS: InputUtil.pressMouseButton(1); break;
+                case RIGHT_MOUSE_RELEASE: InputUtil.releaseMouseButton(1); break;
+                case MIDDLE_MOUSE_PRESS: InputUtil.pressMouseButton(2); break;
+                case MIDDLE_MOUSE_RELEASE: InputUtil.releaseMouseButton(2); break;
+                case LEFT_SHIFT_PRESS: InputUtil.pressLeftShift(); break;
+                case LEFT_SHIFT_RELEASE: InputUtil.releaseLeftShift(); break;
+                case LEFT_CONTROL_PRESS: InputUtil.pressLeftControl(); break;
+                case LEFT_CONTROL_RELEASE: InputUtil.releaseLeftControl(); break;
                 default:
                     throw new RuntimeException("Unknown input in input queue");
             }
@@ -204,6 +224,9 @@ public class ScriptManager {
             if (slot != 0) {
                 InputUtil.releaseHotbar(slot);
             }
+        }
+        else if (Pattern.matches("slot \\d+", command)) {
+              InputUtil.moveMouseToSlot(Integer.parseInt(command.split(" ")[1]));
         }
     }
 }

@@ -3,6 +3,7 @@
   "package": "io.github.rubiksimplosion.minecrafttas.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "HandledScreenAccessor",
     "KeyBindingAccessor",
     "KeyboardAccessor",
     "MixinClientPlayerEntity",

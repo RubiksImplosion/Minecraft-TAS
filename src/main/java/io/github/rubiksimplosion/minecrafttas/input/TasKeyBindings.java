@@ -16,30 +16,36 @@ import org.lwjgl.glfw.GLFW;
 
 @Environment(EnvType.CLIENT)
 public class TasKeyBindings {
-    public static KeyBinding keyTasTest = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.minecrafttas.test",
+    public static KeyBinding keyTasTest = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            "key.minecrafttas.test",
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_H,
-            "category.minecrafttas.tas"));
-    public static KeyBinding keyScriptStop = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.minecrafttas.script.stop",
+            "key.category.tas"));
+    public static KeyBinding keyScriptStop = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            "key.minecrafttas.script.stop",
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_O,
-            "category.minecrafttas.tas"));
-    public static KeyBinding keyScriptStart = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.minecrafttas.script.start",
+            "key.category.tas"));
+    public static KeyBinding keyScriptStart = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            "key.minecrafttas.script.start",
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_I,
-            "category.minecrafttas.tas"));
-    public static KeyBinding keyCreateSavestate = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.minecrafttas.savestate.create",
+            "key.category.tas"));
+    public static KeyBinding keyCreateSavestate = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            "key.minecrafttas.savestate.create",
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_J,
-            "category.minecrafttas.tas"));
-    public static KeyBinding keyLoadSavestate = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.minecrafttas.savestate.load",
+            "key.category.tas"));
+    public static KeyBinding keyLoadSavestate = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            "key.minecrafttas.savestate.load",
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_K,
-            "category.minecrafttas.tas"));
-    public static KeyBinding keyDeleteSavestate = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.minecrafttas.savestate.delete",
+            "key.category.tas"));
+    public static KeyBinding keyDeleteSavestate = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            "key.minecrafttas.savestate.delete",
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_APOSTROPHE,
-            "category.minecrafttas.tas"));
+            "key.category.tas"));
 
     public static void registerKeys() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
