@@ -1,5 +1,15 @@
 # Minecraft-TAS
-A mod for creating tool assisted speedruns of Minecraft.
+The goal of this mod is to allow for "emulator-style" TASes of Minecraft to be created; I.E having script files be created and replayed back as if the keys were actually being pressed on a real keyboard.
+
+The word "real" is important to this mod, as every command has been implemented by directly emulating mouse/keyboard inputs. This is to ensure that anything a TAS does would theoretically be possible to do on a real mouse/keyboard given inhuman speed and precision.
+
+This mod still has a lot of work to be done until I can truly be happy with it, but for the time being feel free to use what it has and more stuff will be added in the future.
+
+Some features I would like to eventually implement (in no particular order):
+* Full save-states for the player ("soft" save-states)
+* Full save-states for the world ("hard" save-states)
+* Making the world deterministic (The same set of inputs will lead to the same results; Currently not the case due to RNG)
+* Utilities for script creation such as GUIs, freezing, tick-by-tick execution, macros, rewind, user input recording, etc...
 
 ## Installation
 1. Download and run the [Fabric installer](https://fabricmc.net/use).
