@@ -9,7 +9,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Hand;
 
 import java.util.List;
@@ -19,14 +21,22 @@ import static net.minecraft.client.util.InputUtil.*;
 public class InputUtil {
     public static boolean autoJumpEnabled = false;
 
+    public static ServerPlayerEntity getServerSidePlayerEntity() {
+        return MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList().get(0);
+    }
+
+    public static ClientPlayerEntity getClientSidePlayerEntity() {
+        return MinecraftClient.getInstance().player;
+    }
+
     public static int findXFromYaw(double newYaw) {
-        float oldYaw = MinecraftClient.getInstance().player.getYaw();
+        float oldYaw = InputUtil.getClientSidePlayerEntity().getYaw();
         double sens = MinecraftClient.getInstance().options.mouseSensitivity * 0.6 + 0.2;
         return (int)(((float)newYaw - oldYaw)/(0.15*8*sens*sens*sens) + MinecraftClient.getInstance().mouse.getX());
     }
 
     public static int findYFromPitch(double newPitch) {
-        float oldPitch = MinecraftClient.getInstance().player.getPitch();
+        float oldPitch = InputUtil.getClientSidePlayerEntity().getPitch();
         double sens = MinecraftClient.getInstance().options.mouseSensitivity * 0.6 + 0.2;
         return (int)(((float)newPitch - oldPitch)/(0.15*8*sens*sens*sens) + MinecraftClient.getInstance().mouse.getY());
     }
@@ -52,11 +62,18 @@ public class InputUtil {
     }
 
     public static void pressLeftShift() {
-        FakeKeyboard.fakeOnKey(340, 1);
+        if (MinecraftTas.scriptManager.modifiers % 2 == 0) {
+            MinecraftTas.scriptManager.modifiers += 1;
+            FakeKeyboard.fakeOnKey(340, 1);
+        }
     }
     public static void releaseLeftShift() {
-        FakeKeyboard.fakeOnKey(340, 0);
+        if (MinecraftTas.scriptManager.modifiers % 2 == 1) {
+            MinecraftTas.scriptManager.modifiers -= 1;
+            FakeKeyboard.fakeOnKey(340, 0);
+        }
     }
+
     public static void pressLeftControl() {
         FakeKeyboard.fakeOnKey(341, 1);
     }

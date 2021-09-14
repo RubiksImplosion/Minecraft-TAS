@@ -9,5 +9,18 @@
 
   "commands.script.load": "Loaded script \"%s\"",
   "commands.script.start": "Started executing script",
-  "commands.script.stop": "Stopped executing script"
+  "commands.script.stop": "Stopped executing script",
+
+  "script.execution.start": "Started executing script",
+  "script.execution.stop": "Stopped executing script",
+  "script.execution.finish": "Finished executing script",
+
+  "savestate.create": "Save-state #%d created",
+  "savestate.load": "Save-state #%d loaded",
+  "savestate.remove": "Save-state #%d deleted",
+
+  "error.scriptNotLoaded": "Error: No loaded script to execute",
+  "error.savestate.multiplayer": "Error: Save-states cannot be created in multiplayer",
+  "error.savestate.load.empty": "Error: No save-states available to load",
+  "error.savestate.remove.empty": "Error: No save-states available to delete"
 }

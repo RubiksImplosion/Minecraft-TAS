@@ -36,6 +36,10 @@ A mod for creating tool assisted speedruns of Minecraft.
 
 `scrolldown <value>` - Scrolls the mouse wheel down the given amount
 
+`slot <id>` - Moves the mouse over the given slot in an inventory.
+
+`load` - Loads the most recent save-state
+
 `+attack|-attack` - Presses and releases the Attack/Destroy key respectively
 
 `+use|-use` - Presses and releases the Use/Place key respectively
@@ -80,7 +84,6 @@ A mod for creating tool assisted speedruns of Minecraft.
 
 `+leftcontrol|-leftcontrol` - Presses and releases left control respectively
 
-`slot <id>` - Moves the mouse over the given slot in an inventory.
 
 
 Insert a semicolon `;` between commands on the same line to execute them both on the same tick
@@ -88,7 +91,10 @@ For example, the command `+forward; +sprint` would begin pressing forward and sp
 
 For a list of slot ids, visit https://wiki.vg/Inventory
 
-*Player input has been implemented by directly simulating mouse/keyboard movements. Due to this there can be slight inconsistencies
+*Player input has been implemented by directly simulating mouse/keyboard movements. 
+This has been done to ensure the TAS is only capable of inputs that are technically possible with a keyboard and mouse.
+The TAS does not directly modify any values, but rather simulates pressing the keys/moving the mouse in the manner required to achieve the desired value.
+Due to this there can be slight inconsistencies
 with things such as player camera movement due to the math related to mouse sensitivity. For the most accurate player camera movement
 set your in-game sensitivity to the lowest value.
 

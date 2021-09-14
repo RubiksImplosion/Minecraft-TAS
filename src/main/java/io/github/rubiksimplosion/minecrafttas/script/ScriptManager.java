@@ -1,12 +1,17 @@
 package io.github.rubiksimplosion.minecrafttas.script;
 
+import io.github.rubiksimplosion.minecrafttas.MinecraftTas;
 import io.github.rubiksimplosion.minecrafttas.input.FakeMouse;
+import io.github.rubiksimplosion.minecrafttas.mixin.ServerPlayerEntityAccessor;
+import io.github.rubiksimplosion.minecrafttas.savestate.SavestateManager;
 import io.github.rubiksimplosion.minecrafttas.util.COMMAND_TYPES;
 import io.github.rubiksimplosion.minecrafttas.util.InputUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,9 +22,11 @@ import java.util.regex.Pattern;
 
 @Environment(EnvType.CLIENT)
 public class ScriptManager {
-    public static final File scriptDirectory = new File(MinecraftClient.getInstance().runDirectory.getPath() + "\\scripts\\");
+//    public static final File scriptDirectory = new File(MinecraftClient.getInstance().runDirectory.getPath() + "\\scripts\\");
+    public static final File scriptDirectory = new File(MinecraftClient.getInstance().runDirectory.getPath() + System.getProperty("file.separator") + "scripts" + System.getProperty("file.separator"));
     public boolean executing = false;
     public boolean fakeInput = false;
+
     /**
      * Controls the keyboard and mouse input modifiers (shift, control, alt; other input modifiers are not relevant to minecraft)
      */
@@ -83,9 +90,13 @@ public class ScriptManager {
         specialToCommandType.put("-autojump", COMMAND_TYPES.AUTO_JUMP_DISABLE);
     }
 
+    public boolean isScriptLoaded() {
+        return this.script != null;
+    }
     public void setScript(String scriptName) {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(scriptDirectory + "\\" + scriptName + ".script"));
+//            BufferedReader reader = new BufferedReader(new FileReader(scriptDirectory + "\\" + scriptName + ".script"));
+            BufferedReader reader = new BufferedReader(new FileReader(scriptDirectory + System.getProperty("file.separator") + scriptName + ".script"));
             script = reader.lines()
                     .toArray(String[]::new);
         } catch (FileNotFoundException e) {
@@ -104,11 +115,12 @@ public class ScriptManager {
         executing = false;
         commandIndex = 0;
         waitTimer = 0;
-        MinecraftClient.getInstance().player.sendMessage(new LiteralText("Script execution finished"), false);
+        modifiers = 0;
+        InputUtil.getClientSidePlayerEntity().sendMessage(new TranslatableText("script.execution.finish"), false);
     }
 
     public void setupTick() {
-        if (waitTimer == 0) {
+        if (waitTimer == 0 && !((ServerPlayerEntityAccessor)InputUtil.getServerSidePlayerEntity()).isInTeleportationState()) {
             String[] commands = Arrays.stream(script[commandIndex].split(";"))
                     .map(String::trim)
                     .toArray(String[]::new);
@@ -227,6 +239,9 @@ public class ScriptManager {
         }
         else if (Pattern.matches("slot \\d+", command)) {
               InputUtil.moveMouseToSlot(Integer.parseInt(command.split(" ")[1]));
+        }
+        else if (Pattern.matches("load", command)) {
+            MinecraftTas.savestateManager.loadSoftSavestate();
         }
     }
 }

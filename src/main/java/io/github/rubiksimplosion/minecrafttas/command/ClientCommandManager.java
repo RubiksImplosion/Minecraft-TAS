@@ -2,6 +2,7 @@ package io.github.rubiksimplosion.minecrafttas.command;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import io.github.rubiksimplosion.minecrafttas.util.InputUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -44,7 +45,7 @@ public class ClientCommandManager {
     }
 
     public static int executeCommand(StringReader reader, String command) {
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        ClientPlayerEntity player = InputUtil.getClientSidePlayerEntity();
         try {
             return player.networkHandler.getCommandDispatcher().execute(reader, new FakeCommandSource(player));
         } catch (CommandException e) {

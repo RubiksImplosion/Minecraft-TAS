@@ -1,10 +1,11 @@
+load
 +inventory; -inventory
 slot 36; +leftmouse; -leftmouse
 slot 1; +rightmouse; -rightmouse
 slot 36; +leftmouse; -leftmouse
 slot 0; +leftmouse; -leftmouse; +rightmouse
-slot 1; slot 2; slot 3; slot 4; -rightmouse;
-slot 0; +leftmouse; -leftmouse
-slot 37; +leftmouse; -leftmouse
-+inventory; -inventory; +hotbar2; -hotbar2
+slot 1; slot 2; slot 3; slot 4; -rightmouse; +leftshift
+slot 0; +leftmouse; -leftmouse; -leftshift
++inventory; -inventory
++hotbar9; -hotbar9
 yaw -90; pitch 35; +use; -use

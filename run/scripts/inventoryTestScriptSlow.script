@@ -14,15 +14,15 @@ slot 2
 wait 10
 slot 3
 wait 10
-slot 4; -rightmouse;
+slot 4; -rightmouse; +leftshift
 wait 10
-slot 0; +leftmouse; -leftmouse
+slot 0
 wait 10
-slot 37; +leftmouse; -leftmouse
++leftmouse; -leftmouse; -leftshift
 wait 10
 +inventory; -inventory
 wait 10
-+hotbar2; -hotbar2
++hotbar9; -hotbar9
 wait 10
 pitch 35
 wait 10

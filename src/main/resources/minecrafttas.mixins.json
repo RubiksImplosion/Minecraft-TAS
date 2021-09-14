@@ -9,11 +9,13 @@
     "MixinClientPlayerEntity",
     "MixinClientPlayNetworkHandler",
     "MixinCommandSuggestor",
+    "MixinInputUtil",
     "MixinKeyboard",
     "MixinMinecraftClient",
     "MixinMouse",
     "MixinTextFieldWidget",
-    "MouseAccessor"
+    "MouseAccessor",
+    "ServerPlayerEntityAccessor"
   ],
   "client": [
   ],

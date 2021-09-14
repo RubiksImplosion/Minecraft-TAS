@@ -18,7 +18,7 @@ public class MixinMinecraftClient {
         if (MinecraftTas.scriptManager.executing) {
             MinecraftTas.scriptManager.setupTick();
             if (InputUtil.autoJumpEnabled) {
-                if (MinecraftClient.getInstance().player.isOnGround() && !MinecraftClient.getInstance().options.keyJump.isPressed()) {
+                if (InputUtil.getClientSidePlayerEntity().isOnGround() && !MinecraftClient.getInstance().options.keyJump.isPressed()) {
                     InputUtil.pressJump();
                 } else if (MinecraftClient.getInstance().options.keyJump.isPressed()) {
                     InputUtil.releaseJump();

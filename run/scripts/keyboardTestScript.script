@@ -1,1 +1,5 @@
-+hotbar2; -hotbar2
++leftshift
+wait 5
+-leftshift
+wait 100
++jump; -jump
