@@ -22,7 +22,6 @@ import java.util.regex.Pattern;
 
 @Environment(EnvType.CLIENT)
 public class ScriptManager {
-//    public static final File scriptDirectory = new File(MinecraftClient.getInstance().runDirectory.getPath() + "\\scripts\\");
     public static final File scriptDirectory = new File(MinecraftClient.getInstance().runDirectory.getPath() + System.getProperty("file.separator") + "scripts" + System.getProperty("file.separator"));
     public boolean executing = false;
     public boolean fakeInput = false;
@@ -95,7 +94,6 @@ public class ScriptManager {
     }
     public void setScript(String scriptName) {
         try {
-//            BufferedReader reader = new BufferedReader(new FileReader(scriptDirectory + "\\" + scriptName + ".script"));
             BufferedReader reader = new BufferedReader(new FileReader(scriptDirectory + System.getProperty("file.separator") + scriptName + ".script"));
             script = reader.lines()
                     .toArray(String[]::new);
