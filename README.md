@@ -10,6 +10,9 @@ Some features I would like to eventually implement (in no particular order):
 * Full save-states for the world ("hard" save-states)
 * Making the world deterministic (The same set of inputs will lead to the same results; Currently not the case due to RNG)
 * Utilities for script creation such as GUIs, freezing, tick-by-tick execution, macros, rewind, user input recording, etc...
+* Tools for manipulating RNG*
+
+*These tools would help with the manipulation of RNG, but not outright sidestep it. For example, a RNG tool for getting flint from gravel would NOT give you flint from gravel every time you broke a gravel, but rather tell you on which tick and under what conditions a flint would drop from a gravel if you were to break one.
 
 ## Installation
 1. Download and run the [Fabric installer](https://fabricmc.net/use).
