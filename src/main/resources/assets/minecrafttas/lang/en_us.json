@@ -7,7 +7,9 @@
   "key.minecrafttas.savestate.load": "Load save-state",
   "key.minecrafttas.savestate.delete": "Delete save-state",
 
-  "commands.script.load": "Loaded script \"%s\"",
+  "commands.script.load.success": "Successfully loaded script \"%s\"",
+  "commands.script.load.fail": "Failed to load script \"%s\": Script does not exist",
+  "commands.script.load.empty": "Failed to load script \"%s\": Cannot load empty script",
   "commands.script.start": "Started executing script",
   "commands.script.stop": "Stopped executing script",
 

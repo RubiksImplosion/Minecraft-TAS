@@ -90,15 +90,22 @@ public class ScriptManager {
     }
 
     public boolean isScriptLoaded() {
-        return this.script != null;
+        return this.script != null && this.script.length > 0;
     }
-    public void setScript(String scriptName) {
+
+    //TODO "compile" script to check for invalid commands
+    public int setScript(String scriptName) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(scriptDirectory + System.getProperty("file.separator") + scriptName + ".script"));
             script = reader.lines()
                     .toArray(String[]::new);
+            if (script.length > 0) {
+                return 0;
+            }
+            script = null;
+            return 1;
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            return 2;
         }
     }
 
