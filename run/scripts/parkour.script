@@ -1,0 +1,6 @@
++autojump; +forward; +sprint
+wait 20
+-autojump
+yaw 140
+wait 20
+-forward; -sprint

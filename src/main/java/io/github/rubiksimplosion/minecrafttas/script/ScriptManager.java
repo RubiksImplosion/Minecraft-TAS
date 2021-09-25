@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 
 @Environment(EnvType.CLIENT)
 public class ScriptManager {
-    public static final File scriptDirectory = new File(MinecraftClient.getInstance().runDirectory.getPath() + System.getProperty("file.separator") + "scripts" + System.getProperty("file.separator"));
+    public static final File scriptDirectory = initializeScriptDirectory();
     public boolean executing = false;
     public boolean fakeInput = false;
 
@@ -241,6 +241,14 @@ public class ScriptManager {
         else if (Pattern.matches("load", command)) {
             MinecraftTas.savestateManager.loadSoftSavestate();
         }
+    }
+
+    private static File initializeScriptDirectory() {
+        File scriptDirectory = new File(MinecraftClient.getInstance().runDirectory.getPath() + System.getProperty("file.separator") + "scripts" + System.getProperty("file.separator"));
+        if (!scriptDirectory.exists()) {
+            scriptDirectory.mkdir();
+        }
+        return scriptDirectory;
     }
 }
 
