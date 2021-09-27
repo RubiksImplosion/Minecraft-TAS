@@ -10,6 +10,7 @@
   "commands.script.load.success": "Successfully loaded script \"%s\"",
   "commands.script.load.fail": "Failed to load script \"%s\": Script does not exist",
   "commands.script.load.empty": "Failed to load script \"%s\": Cannot load empty script",
+  "commands.script.load.invalid": "Failed to load script \"%s\": Invalid command \"%s\" on line %d",
   "commands.script.start": "Started executing script",
   "commands.script.stop": "Stopped executing script",
 

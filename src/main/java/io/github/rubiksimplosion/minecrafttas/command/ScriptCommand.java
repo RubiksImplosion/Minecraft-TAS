@@ -40,13 +40,15 @@ public class ScriptCommand {
     }
 
     public static int load(ServerCommandSource source, String name) {
-        int status = MinecraftTas.scriptManager.setScript(name);
+        int status = MinecraftTas.scriptManager.setScript(name, source);
         if (status == 0) {
             source.sendFeedback(new TranslatableText("commands.script.load.success", name), false);
         } else if (status == 1) {
             source.sendFeedback(new TranslatableText("commands.script.load.empty", name), false);
         } else if (status == 2) {
             source.sendFeedback(new TranslatableText("commands.script.load.fail", name), false);
+        } else if (status == 3) {
+            // source.sendFeedback(new TranslatableText("commands.script.load.invalid", name), false);
         }
         return 0;
     }

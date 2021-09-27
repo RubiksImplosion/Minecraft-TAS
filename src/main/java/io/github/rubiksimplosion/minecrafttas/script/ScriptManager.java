@@ -9,6 +9,7 @@ import io.github.rubiksimplosion.minecrafttas.util.InputUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
@@ -33,7 +34,7 @@ public class ScriptManager {
     private String[] script;
     private int commandIndex = 0;
     private int waitTimer = 0;
-
+    private boolean compiling = false;
 
     private final Queue<COMMAND_TYPES> keyInputQueue = new LinkedList<COMMAND_TYPES>();
     private final Queue<COMMAND_TYPES> specialInputQueue = new LinkedList<COMMAND_TYPES>();
@@ -93,19 +94,47 @@ public class ScriptManager {
         return this.script != null && this.script.length > 0;
     }
 
-    //TODO "compile" script to check for invalid commands
-    public int setScript(String scriptName) {
+    // passing ServerCommandSource feels hacky, might refactor at some point
+    public int setScript(String scriptName, ServerCommandSource source) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(scriptDirectory + System.getProperty("file.separator") + scriptName + ".script"));
             script = reader.lines()
                     .toArray(String[]::new);
+            for (int i = 0; i < script.length; i++) {
+                String[] commands = Arrays.stream(script[i].split(";"))
+                        .map(String::trim)
+                        .toArray(String[]::new);
+                if (!commands[0].startsWith("//")) {
+//                    for (int j = 0; j < commands.length; j++) {
+                    for (String command : commands) {
+//                        String command = script[j].trim();
+                        command = command.trim();
+                        if (!(Pattern.matches("wait \\d+", command) ||
+                                commandToCommandType.containsKey(command) ||
+                                specialToCommandType.containsKey(command) ||
+                                Pattern.matches("yaw -?\\d+\\.?\\d*", command) ||
+                                Pattern.matches("pitch -?\\d+\\.?\\d*", command) ||
+                                Pattern.matches("scrollup \\d+", command) ||
+                                Pattern.matches("scrolldown \\d+", command) ||
+                                Pattern.matches("\\+hotbar\\d", command) ||
+                                Pattern.matches("-hotbar\\d", command) ||
+                                Pattern.matches("slot \\d+", command) ||
+                                Pattern.matches("load", command)))
+                        {
+                            source.sendFeedback(new TranslatableText("commands.script.load.invalid", scriptName, command, i), false);
+                            script = null;
+                            return 3; // invalid command
+                        }
+                    }
+                }
+            }
             if (script.length > 0) {
-                return 0;
+                return 0; // success
             }
             script = null;
-            return 1;
+            return 1; // script is empty
         } catch (FileNotFoundException e) {
-            return 2;
+            return 2; // script does not exist
         }
     }
 
@@ -202,7 +231,7 @@ public class ScriptManager {
         }
     }
 
-    public void parseCommand(String command) {
+    private void parseCommand(String command) {
         if (Pattern.matches("wait \\d+", command)) {
             waitTimer = Integer.parseInt(command.split(" ")[1]);
         }
