@@ -16,6 +16,8 @@ public class MixinMinecraftClient {
     @Inject(method = "tick", at = @At("HEAD"))
     private void executeTickHead(CallbackInfo ci) {
         if (MinecraftTas.scriptManager.executing) {
+            //updates mouse without actually moving it, allows for yaw/pitch changes after screen changes
+            InputUtil.updateCursorPos();
             MinecraftTas.scriptManager.setupTick();
             if (InputUtil.autoJumpEnabled) {
                 if (InputUtil.getClientSidePlayerEntity().isOnGround() && !MinecraftClient.getInstance().options.keyJump.isPressed()) {

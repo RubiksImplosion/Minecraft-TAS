@@ -29,16 +29,30 @@ public class InputUtil {
         return MinecraftClient.getInstance().player;
     }
 
+    //derived from Mouse.updateMouse();
     public static int findXFromYaw(double newYaw) {
         float oldYaw = InputUtil.getClientSidePlayerEntity().getYaw();
         double sens = MinecraftClient.getInstance().options.mouseSensitivity * 0.6 + 0.2;
         return (int)(((float)newYaw - oldYaw)/(0.15*8*sens*sens*sens) + MinecraftClient.getInstance().mouse.getX());
     }
 
+    //derived from Mouse.updateMouse();
     public static int findYFromPitch(double newPitch) {
         float oldPitch = InputUtil.getClientSidePlayerEntity().getPitch();
         double sens = MinecraftClient.getInstance().options.mouseSensitivity * 0.6 + 0.2;
         return (int)(((float)newPitch - oldPitch)/(0.15*8*sens*sens*sens) + MinecraftClient.getInstance().mouse.getY());
+    }
+
+    public static void changeYaw(double yaw) {
+        FakeMouse.fakeCursorMove(findXFromYaw(yaw), MinecraftClient.getInstance().mouse.getY());
+    }
+
+    public static void changePitch(double pitch) {
+        FakeMouse.fakeCursorMove(MinecraftClient.getInstance().mouse.getX(), findYFromPitch(pitch));
+    }
+
+    public static void updateCursorPos() {
+        FakeMouse.fakeCursorMove(MinecraftClient.getInstance().mouse.getX(), MinecraftClient.getInstance().mouse.getY());
     }
 
     public static void moveMouseToSlot(int slotId) {
@@ -79,13 +93,6 @@ public class InputUtil {
     }
     public static void releaseLeftControl() {
         FakeKeyboard.fakeOnKey(341, 0);
-    }
-    public static void changeYaw(double yaw) {
-        FakeMouse.fakeCursorMove(findXFromYaw(yaw), MinecraftClient.getInstance().mouse.getY());
-    }
-
-    public static void changePitch(double pitch) {
-        FakeMouse.fakeCursorMove(MinecraftClient.getInstance().mouse.getX(), findYFromPitch(pitch));
     }
 
     public static void enableAutoJump() {

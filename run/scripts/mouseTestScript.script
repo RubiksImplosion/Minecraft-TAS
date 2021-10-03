@@ -1,0 +1,5 @@
+yaw 10; pitch 0
++jump
+wait 10
+-jump
+yaw 50; pitch 20
