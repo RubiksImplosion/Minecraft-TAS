@@ -17,6 +17,7 @@
   "script.execution.start": "Started executing script",
   "script.execution.stop": "Stopped executing script",
   "script.execution.finish": "Finished executing script",
+  "script.execution.unknown": "Unknown command on line \"%d\", stopped executing script",
 
   "savestate.create": "Save-state #%d created",
   "savestate.load": "Save-state #%d loaded",

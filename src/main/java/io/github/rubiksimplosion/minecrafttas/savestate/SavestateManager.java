@@ -30,6 +30,7 @@ public class SavestateManager {
     }
 
     //TODO: make loading savestate in different dimensions consistent
+    //TODO: make "hard" savestates
     public void loadSoftSavestate() {
         if (softSavestates.size() > 0) {
             PlayerState state = softSavestates.get(softSavestates.size()-1);

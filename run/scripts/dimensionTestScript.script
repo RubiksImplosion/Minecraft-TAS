@@ -1,0 +1,6 @@
++forward
+-forward
+wait 80
++forward
+wait 2
+-forward

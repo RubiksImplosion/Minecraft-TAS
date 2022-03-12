@@ -2,16 +2,13 @@ package io.github.rubiksimplosion.minecrafttas.script;
 
 import io.github.rubiksimplosion.minecrafttas.MinecraftTas;
 import io.github.rubiksimplosion.minecrafttas.input.FakeMouse;
-import io.github.rubiksimplosion.minecrafttas.mixin.ServerPlayerEntityAccessor;
-import io.github.rubiksimplosion.minecrafttas.savestate.SavestateManager;
+//import io.github.rubiksimplosion.minecrafttas.mixin.MinecraftClientAccessor;
 import io.github.rubiksimplosion.minecrafttas.util.COMMAND_TYPES;
 import io.github.rubiksimplosion.minecrafttas.util.InputUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 
 import java.io.BufferedReader;
@@ -34,8 +31,8 @@ public class ScriptManager {
     private String[] script;
     private int commandIndex = 0;
     private int waitTimer = 0;
-    private boolean compiling = false;
-
+    private int length = 0;
+    private int prevTick = 0;
     private final Queue<COMMAND_TYPES> keyInputQueue = new LinkedList<COMMAND_TYPES>();
     private final Queue<COMMAND_TYPES> specialInputQueue = new LinkedList<COMMAND_TYPES>();
 
@@ -100,6 +97,7 @@ public class ScriptManager {
             BufferedReader reader = new BufferedReader(new FileReader(scriptDirectory + System.getProperty("file.separator") + scriptName + ".script"));
             script = reader.lines()
                     .toArray(String[]::new);
+            length += script.length;
             for (int i = 0; i < script.length; i++) {
                 String[] commands = Arrays.stream(script[i].split(";"))
                         .map(String::trim)
@@ -109,7 +107,10 @@ public class ScriptManager {
                     for (String command : commands) {
 //                        String command = script[j].trim();
                         command = command.trim();
-                        if (!(Pattern.matches("wait \\d+", command) ||
+                        if (Pattern.matches("wait \\d+", command)) {
+                            length += Integer.parseInt(command.split(" ")[1]);
+                        }
+                        if(!(Pattern.matches("wait \\d+", command) ||
                                 commandToCommandType.containsKey(command) ||
                                 specialToCommandType.containsKey(command) ||
                                 Pattern.matches("yaw -?\\d+\\.?\\d*", command) ||
@@ -121,17 +122,20 @@ public class ScriptManager {
                                 Pattern.matches("slot \\d+", command) ||
                                 Pattern.matches("load", command)))
                         {
-                            source.sendFeedback(new TranslatableText("commands.script.load.invalid", scriptName, command, i), false);
+                            source.sendFeedback(new TranslatableText("commands.script.load.invalid", scriptName, command, i + 1), false);
                             script = null;
+                            length = 0;
                             return 3; // invalid command
                         }
                     }
                 }
             }
             if (script.length > 0) {
+
                 return 0; // success
             }
             script = null;
+            length = 0;
             return 1; // script is empty
         } catch (FileNotFoundException e) {
             return 2; // script does not exist
@@ -140,6 +144,9 @@ public class ScriptManager {
 
     public void start() {
         if (script != null) {
+//            prevTick = ((MinecraftServerAccessor)MinecraftClient.getInstance().getServer()).getTicks();
+
+//            ((RenderTickCounterAccessor)((MinecraftClientAccessor)MinecraftClient.getInstance()).getRenderTickCounter()).setTickTime(25);
             executing = true;
             waitTimer = 1;
         }
@@ -150,28 +157,33 @@ public class ScriptManager {
         commandIndex = 0;
         waitTimer = 0;
         modifiers = 0;
+        keyInputQueue.clear();
+        specialInputQueue.clear();
         InputUtil.getClientSidePlayerEntity().sendMessage(new TranslatableText("script.execution.finish"), false);
     }
 
     public void setupTick() {
-        if (waitTimer == 0 && !((ServerPlayerEntityAccessor)InputUtil.getServerSidePlayerEntity()).isInTeleportationState()) {
-            String[] commands = Arrays.stream(script[commandIndex].split(";"))
-                    .map(String::trim)
-                    .toArray(String[]::new);
-            commandIndex++;
-            if (!commands[0].startsWith("//")) {
-                for (String command : commands) {
-                    parseCommand(command.trim());
+//        if (((MinecraftServerAccessor)MinecraftClient.getInstance().getServer()).getTicks() > prevTick) {
+//            prevTick = ((MinecraftServerAccessor) MinecraftClient.getInstance().getServer()).getTicks();
+            if (waitTimer == 0 /*&& !((ServerPlayerEntityAccessor)InputUtil.getServerSidePlayerEntity()).isInTeleportationState()*/) {
+                String[] commands = Arrays.stream(script[commandIndex].split(";"))
+                        .map(String::trim)
+                        .toArray(String[]::new);
+                commandIndex++;
+                if (!commands[0].startsWith("//")) {
+                    for (String command : commands) {
+                        parseCommand(command.trim());
+                    }
                 }
+                if (commandIndex == script.length) {
+                    stop();
+                }
+                System.out.println(Arrays.toString(commands));
+            } else {
+                waitTimer--;
+                System.out.println(waitTimer);
             }
-            if (commandIndex == script.length) {
-                stop();
-            }
-            System.out.println(Arrays.toString(commands));
-        } else {
-            waitTimer--;
-            System.out.println(waitTimer);
-        }
+//        }
     }
 
     public void executeTick() {
@@ -226,7 +238,10 @@ public class ScriptManager {
                 case LEFT_CONTROL_PRESS: InputUtil.pressLeftControl(); break;
                 case LEFT_CONTROL_RELEASE: InputUtil.releaseLeftControl(); break;
                 default:
-                    throw new RuntimeException("Unknown input in input queue");
+                    InputUtil.getClientSidePlayerEntity().sendMessage(
+                            new TranslatableText("script.execute.unknown", commandIndex), false);
+                    stop();
+//                    throw new RuntimeException("Unknown input in input queue");
             }
         }
     }

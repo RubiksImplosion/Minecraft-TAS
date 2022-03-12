@@ -56,15 +56,20 @@ public class InputUtil {
     }
 
     public static void moveMouseToSlot(int slotId) {
-        Slot slot = ((HandledScreen)MinecraftClient.getInstance().currentScreen).getScreenHandler().getSlot(slotId);
+        try {
+            Slot slot = ((HandledScreen) MinecraftClient.getInstance().currentScreen).getScreenHandler().getSlot(slotId);
 
-        int x = ((HandledScreenAccessor)MinecraftClient.getInstance().currentScreen).getX() + slot.x;
-        x = x * MinecraftClient.getInstance().getWindow().getWidth() / MinecraftClient.getInstance().getWindow().getScaledWidth();
+            int x = ((HandledScreenAccessor) MinecraftClient.getInstance().currentScreen).getX() + slot.x;
+            x = x * MinecraftClient.getInstance().getWindow().getWidth() / MinecraftClient.getInstance().getWindow().getScaledWidth();
 
-        int y = ((HandledScreenAccessor)MinecraftClient.getInstance().currentScreen).getY() + slot.y;
-        y = y * MinecraftClient.getInstance().getWindow().getHeight() / MinecraftClient.getInstance().getWindow().getScaledHeight();
+            int y = ((HandledScreenAccessor) MinecraftClient.getInstance().currentScreen).getY() + slot.y;
+            y = y * MinecraftClient.getInstance().getWindow().getHeight() / MinecraftClient.getInstance().getWindow().getScaledHeight();
 
-        FakeMouse.fakeCursorMove(x, y);
+            FakeMouse.fakeCursorMove(x, y);
+        } catch (NullPointerException e) {
+            //TODO: Add error check on script compilation
+            e.printStackTrace();
+        }
     }
 
     public static void pressMouseButton(int button) {
@@ -101,7 +106,7 @@ public class InputUtil {
 
     public static void disableAutoJump() {
         autoJumpEnabled = false;
-        if (MinecraftClient.getInstance().options.keyJump.isPressed()) {
+        if (MinecraftClient.getInstance().options.jumpKey.isPressed()) {
             InputUtil.releaseJump();
         }
     }
@@ -275,13 +280,9 @@ public class InputUtil {
 
     private static void pressKey(Key key, boolean pressed) {
         updateModifiers(key, pressed);
-        switch(key.getCategory()) {
-            case KEYSYM:
-                FakeKeyboard.fakeOnKey(key.getCode(), pressed ? 1 : 0);
-                break;
-            case MOUSE:
-                FakeMouse.fakeMouseButton(key.getCode(), pressed ? 1 : 0);
-                break;
+        switch (key.getCategory()) {
+            case KEYSYM -> FakeKeyboard.fakeOnKey(key.getCode(), pressed ? 1 : 0);
+            case MOUSE -> FakeMouse.fakeMouseButton(key.getCode(), pressed ? 1 : 0);
         }
     }
 

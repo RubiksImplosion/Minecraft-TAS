@@ -41,11 +41,4 @@ public class MixinMouse {
             }
         }
     }
-
-//    @Inject(method = "updateMouse", at = @At("HEAD"), cancellable = true)
-//    private void onUpdateMouse(CallbackInfo ci) {
-////        if (InputManager.getInstance().executing) {
-////            ci.cancel();
-////        }
-//    }
 }

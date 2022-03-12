@@ -8,6 +8,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.util.telemetry.TelemetrySender;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.packet.s2c.play.CommandTreeS2CPacket;
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket;
@@ -32,7 +33,7 @@ public class MixinClientPlayNetworkHandler {
 
     @SuppressWarnings("unchecked")
     @Inject(method = "<init>", at = @At("RETURN"))
-    public void onInit(MinecraftClient mc, Screen screen, ClientConnection connection, GameProfile profile, CallbackInfo ci) {
+    public void onInit(MinecraftClient client, Screen screen, ClientConnection connection, GameProfile profile, TelemetrySender telemetrySender, CallbackInfo ci) {
         MinecraftTas.registerCommands((CommandDispatcher<ServerCommandSource>) (Object) commandDispatcher);
     }
 

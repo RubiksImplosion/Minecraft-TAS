@@ -27,7 +27,7 @@ public class PlayerState {
                 player.getYaw(),
                 player.getPitch(),
                 player.getInventory(),
-                player.getServerWorld());
+                player.getWorld());
     }
 
     public PlayerState(Vec3d position, Vec3d velocity, float yaw, float pitch, PlayerInventory inventory, ServerWorld world) {

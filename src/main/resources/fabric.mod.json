@@ -19,9 +19,9 @@
     "minecrafttas.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.7.8+build.184",
+    "fabricloader": ">=0.13.3",
     "fabric": "*",
-    "minecraft": "1.17.1"
+    "minecraft": "1.18.2"
   }
 }
 
