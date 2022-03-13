@@ -70,3 +70,5 @@ publishing {
         // retrieving dependencies.
     }
 }
+
+apply from: 'setupRealMcAccount.gradle'

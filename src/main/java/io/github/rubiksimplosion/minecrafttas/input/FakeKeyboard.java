@@ -33,10 +33,10 @@ public class FakeKeyboard {
         }
         MinecraftTas.scriptManager.fakeInput = false;
     }
-    public static void fakeOnChar(int i, int j) {
+    public static void fakeOnChar(int key) {
         ((KeyboardAccessor) MinecraftClient.getInstance().keyboard).callOnChar(
                 MinecraftClient.getInstance().getWindow().getHandle(),
-                i,
-                j);
+                key,
+                MinecraftTas.scriptManager.modifiers);
     }
 }

@@ -6,15 +6,11 @@ import io.github.rubiksimplosion.minecrafttas.input.FakeMouse;
 import io.github.rubiksimplosion.minecrafttas.mixin.HandledScreenAccessor;
 import io.github.rubiksimplosion.minecrafttas.mixin.KeyBindingAccessor;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Hand;
-
-import java.util.List;
+import org.lwjgl.glfw.GLFW;
 
 import static net.minecraft.client.util.InputUtil.*;
 
@@ -83,21 +79,21 @@ public class InputUtil {
     public static void pressLeftShift() {
         if (MinecraftTas.scriptManager.modifiers % 2 == 0) {
             MinecraftTas.scriptManager.modifiers += 1;
-            FakeKeyboard.fakeOnKey(340, 1);
+            FakeKeyboard.fakeOnKey(GLFW.GLFW_KEY_LEFT_SHIFT, 1);
         }
     }
     public static void releaseLeftShift() {
         if (MinecraftTas.scriptManager.modifiers % 2 == 1) {
             MinecraftTas.scriptManager.modifiers -= 1;
-            FakeKeyboard.fakeOnKey(340, 0);
+            FakeKeyboard.fakeOnKey(GLFW.GLFW_KEY_LEFT_SHIFT, 0);
         }
     }
 
     public static void pressLeftControl() {
-        FakeKeyboard.fakeOnKey(341, 1);
+        FakeKeyboard.fakeOnKey(GLFW.GLFW_KEY_LEFT_CONTROL, 1);
     }
     public static void releaseLeftControl() {
-        FakeKeyboard.fakeOnKey(341, 0);
+        FakeKeyboard.fakeOnKey(GLFW.GLFW_KEY_LEFT_CONTROL, 0);
     }
 
     public static void enableAutoJump() {
@@ -270,12 +266,23 @@ public class InputUtil {
         pressKey(key, false);
     }
 
+    public static void pressEnter() {
+        FakeKeyboard.fakeOnKey(GLFW.GLFW_KEY_ENTER, 1);
+    }
+
+    public static void releaseEnter() {
+        FakeKeyboard.fakeOnKey(GLFW.GLFW_KEY_ENTER, 0);
+    }
     public static void pressEscape() {
         pressKey(fromTranslationKey("key.keyboard.escape"), true);
     }
 
     public static void releaseEscape() {
         pressKey(fromTranslationKey("key.keyboard.escape"), false);
+    }
+
+    public static void typeLiteralChar(char key) {
+        FakeKeyboard.fakeOnChar(key);
     }
 
     private static void pressKey(Key key, boolean pressed) {
@@ -287,18 +294,13 @@ public class InputUtil {
     }
 
     public static void updateModifiers(Key key, boolean pressed) {
-        //shift
-        if (key.getCode() == 340) {
+        if (key.getCode() == GLFW.GLFW_KEY_LEFT_SHIFT) {
             MinecraftTas.scriptManager.modifiers += pressed ? 1 : -1;
         }
-
-        //control
-        else if (key.getCode() == 341) {
+        else if (key.getCode() == GLFW.GLFW_KEY_LEFT_CONTROL) {
             MinecraftTas.scriptManager.modifiers += pressed ? 2 : -2;
         }
-
-        //alt
-        else if (key.getCode() == 342) {
+        else if (key.getCode() == GLFW.GLFW_KEY_LEFT_ALT) {
             MinecraftTas.scriptManager.modifiers += pressed ? 4 : -4;
         }
     }
