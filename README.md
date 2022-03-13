@@ -35,6 +35,7 @@ Some features I would like to eventually implement (in no particular order):
 7. Load a save-state by pressing the load save-state keybind (default `K`)
 8. Delete a save-state by pressing the delete save-state keybind (default `'`/`APOSTROPHE`)
 
+For example scripts, see the `run/scripts` folder above
 ### Available commands:
  
  `wait <ticks>` pauses execution of the script for the given number of ticks 
@@ -52,6 +53,8 @@ Some features I would like to eventually implement (in no particular order):
 `slot <id>` - Moves the mouse over the given slot in an inventory.
 
 `load` - Loads the most recent save-state
+
+`text "<value>"` - Types the given text into the current screen. Quotes around the text are mandatory.
 
 `+attack|-attack` - Presses and releases the Attack/Destroy key respectively
 
@@ -97,7 +100,7 @@ Some features I would like to eventually implement (in no particular order):
 
 `+leftcontrol|-leftcontrol` - Presses and releases left control respectively
 
-
+`+enter|-enter` - Presses and releases enter respectively
 
 Insert a semicolon `;` between commands on the same line to execute them both on the same tick
 For example, the command `+forward; +sprint` would begin pressing forward and sprint on the same tick.
