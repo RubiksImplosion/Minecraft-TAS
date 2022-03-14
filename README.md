@@ -134,4 +134,4 @@ set your in-game sensitivity to the lowest value.
     - Sprint
     - Hotbar
     
-This mod is a work in progress. Expect things to be buggy and have limited functionality for the time being.
+This mod is a heavy work in progress. Expect things to be buggy and have limited functionality for the time being.

@@ -8,8 +8,12 @@ import io.github.rubiksimplosion.minecrafttas.util.InputUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,12 +36,14 @@ public class ScriptManager {
     private int commandIndex = 0;
     private int waitTimer = 0;
     private int length = 0;
-    private final Queue<COMMAND_TYPES> keyInputQueue = new LinkedList<>();
-    private final Queue<COMMAND_TYPES> specialInputQueue = new LinkedList<>();
-    private final Queue<String> literalTextQueue = new LinkedList<>();
+    private final Queue<COMMAND_TYPES> keyInputQueue = new LinkedList<>();  // standard commands
+    private final Queue<COMMAND_TYPES> specialInputQueue = new LinkedList<>();  // always executed first
+    private final Queue<String> literalTextQueue = new LinkedList<>();  // used for simulating typing
+    private final Queue<ItemGroup> creativeTabQueue = new LinkedList<>(); // used for creative tabs
 
     private final Map<String, COMMAND_TYPES> commandToCommandType = new HashMap<>();
     private final Map<String, COMMAND_TYPES> specialToCommandType = new HashMap<>();
+    private final Map<String, ItemGroup> stringToItemGroup = new HashMap<>();
 
     public ScriptManager() {
         commandToCommandType.put("+attack", COMMAND_TYPES.ATTACK_PRESS);
@@ -105,14 +111,26 @@ public class ScriptManager {
         //special
         specialToCommandType.put("+autojump", COMMAND_TYPES.AUTO_JUMP_ENABLE);
         specialToCommandType.put("-autojump", COMMAND_TYPES.AUTO_JUMP_DISABLE);
+        //creative tabs
+        stringToItemGroup.put("building", ItemGroup.BUILDING_BLOCKS);
+        stringToItemGroup.put("decoration", ItemGroup.DECORATIONS);
+        stringToItemGroup.put("redstone", ItemGroup.REDSTONE);
+        stringToItemGroup.put("transportation", ItemGroup.TRANSPORTATION);
+        stringToItemGroup.put("hotbar", ItemGroup.HOTBAR);
+        stringToItemGroup.put("search", ItemGroup.SEARCH);
+        stringToItemGroup.put("misc", ItemGroup.MISC);
+        stringToItemGroup.put("food", ItemGroup.FOOD);
+        stringToItemGroup.put("tools", ItemGroup.TOOLS);
+        stringToItemGroup.put("combat", ItemGroup.COMBAT);
+        stringToItemGroup.put("brewing", ItemGroup.BREWING);
+        stringToItemGroup.put("inventory", ItemGroup.INVENTORY);
     }
 
     public boolean isScriptLoaded() {
         return this.script != null && this.script.length > 0;
     }
 
-    // passing ServerCommandSource feels hacky, will refactor at some point
-    public int setScript(String scriptName, ServerCommandSource source) {
+    public int setScript(String scriptName) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(scriptDirectory + System.getProperty("file.separator") + scriptName + ".script"));
             script = reader.lines()
@@ -130,6 +148,17 @@ public class ScriptManager {
                         if (Pattern.matches("wait \\d+", command)) {
                             length += Integer.parseInt(command.split(" ")[1]);
                         }
+                        if (Pattern.matches("tab .+", command)) {
+                            if (stringToItemGroup.get(command.split(" ")[1]) == null) {
+                                InputUtil.sendError(new TranslatableText("commands.script.load.invalidTab", scriptName, command, i + 1));
+                                for (String key : stringToItemGroup.keySet()) {
+                                    InputUtil.sendError(new LiteralText("  " + key));
+                                }
+                                script = null;
+                                length = 0;
+                                return 3; // invalid command
+                            }
+                        }
                         if(!(Pattern.matches("wait \\d+", command) ||
                                 commandToCommandType.containsKey(command) ||
                                 specialToCommandType.containsKey(command) ||
@@ -141,9 +170,10 @@ public class ScriptManager {
 //                                Pattern.matches("-hotbar\\d", command) ||
                                 Pattern.matches("slot \\d+", command) ||
                                 Pattern.matches("load", command) ||
-                                Pattern.matches("text \".*\"", command)))
+                                Pattern.matches("text \".*\"", command) ||
+                                Pattern.matches("tab .+", command)))
                         {
-                            source.sendFeedback(new TranslatableText("commands.script.load.invalid", scriptName, command, i + 1), false);
+                            InputUtil.sendError(new TranslatableText("commands.script.load.invalid", scriptName, command, i + 1));
                             script = null;
                             length = 0;
                             return 3; // invalid command
@@ -152,7 +182,6 @@ public class ScriptManager {
                 }
             }
             if (script.length > 0) {
-
                 return 0; // success
             }
             script = null;
@@ -178,14 +207,15 @@ public class ScriptManager {
         commandIndex = 0;
         waitTimer = 0;
         modifiers = 0;
+        length = 0;
         keyInputQueue.clear();
         specialInputQueue.clear();
+        literalTextQueue.clear();
+        creativeTabQueue.clear();
         InputUtil.getClientSidePlayerEntity().sendMessage(new TranslatableText("script.execution.finish"), false);
     }
 
     public void setupTick() {
-//        if (((MinecraftServerAccessor)MinecraftClient.getInstance().getServer()).getTicks() > prevTick) {
-//            prevTick = ((MinecraftServerAccessor) MinecraftClient.getInstance().getServer()).getTicks();
             if (waitTimer == 0 /*&& !((ServerPlayerEntityAccessor)InputUtil.getServerSidePlayerEntity()).isInTeleportationState()*/) {
                 if (commandIndex == script.length) {
                     stop();
@@ -279,6 +309,7 @@ public class ScriptManager {
                 case HOTBAR_9_RELEASE -> InputUtil.releaseHotbar(9);
                 case ENTER_PRESS -> InputUtil.pressEnter();
                 case ENTER_RELEASE -> InputUtil.releaseEnter();
+                case TAB -> InputUtil.moveMouseToTab(creativeTabQueue.remove());
                 case TEXT -> {
                     String text = literalTextQueue.remove();
                     for (char c : text.toCharArray()) {
@@ -332,6 +363,11 @@ public class ScriptManager {
             String text = command.substring(6, command.length() - 1);
             literalTextQueue.add(text);
             keyInputQueue.add(COMMAND_TYPES.TEXT);
+        }
+        else if (Pattern.matches("tab .+", command)) {
+            String tab = command.split(" ")[1];
+            creativeTabQueue.add(stringToItemGroup.get(tab));
+            keyInputQueue.add(COMMAND_TYPES.TAB);
         }
     }
 

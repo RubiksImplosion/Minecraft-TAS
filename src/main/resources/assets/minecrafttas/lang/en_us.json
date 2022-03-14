@@ -11,6 +11,7 @@
   "commands.script.load.fail": "Failed to load script \"%s\": Script does not exist",
   "commands.script.load.empty": "Failed to load script \"%s\": Cannot load empty script",
   "commands.script.load.invalid": "Failed to load script \"%s\": Invalid command \"%s\" on line %d",
+  "commands.script.load.invalidTab": "Failed to load script \"%s\": Invalid command \"%s\" on line %d. Valid tabs are the following:",
   "commands.script.start": "Started executing script",
   "commands.script.stop": "Stopped executing script",
 

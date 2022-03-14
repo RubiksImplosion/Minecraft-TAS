@@ -5,11 +5,20 @@ import io.github.rubiksimplosion.minecrafttas.input.FakeKeyboard;
 import io.github.rubiksimplosion.minecrafttas.input.FakeMouse;
 import io.github.rubiksimplosion.minecrafttas.mixin.HandledScreenAccessor;
 import io.github.rubiksimplosion.minecrafttas.mixin.KeyBindingAccessor;
+import io.github.rubiksimplosion.minecrafttas.mixin.MouseAccessor;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.BaseText;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
+import net.minecraft.util.Util;
 import org.lwjgl.glfw.GLFW;
 
 import static net.minecraft.client.util.InputUtil.*;
@@ -25,6 +34,13 @@ public class InputUtil {
         return MinecraftClient.getInstance().player;
     }
 
+    public static void sendError(BaseText text) {
+        getClientSidePlayerEntity().sendSystemMessage(text.formatted(Formatting.RED), Util.NIL_UUID);
+    }
+
+    public static void sendFeedback(BaseText text) {
+        getClientSidePlayerEntity().sendSystemMessage(text, Util.NIL_UUID);
+    }
     //derived from Mouse.updateMouse();
     public static int findXFromYaw(double newYaw) {
         float oldYaw = InputUtil.getClientSidePlayerEntity().getYaw();
@@ -63,8 +79,36 @@ public class InputUtil {
 
             FakeMouse.fakeCursorMove(x, y);
         } catch (NullPointerException e) {
-            //TODO: Add error check on script compilation
             e.printStackTrace();
+        }
+    }
+
+    // moves cursor to a creative tabs
+    public static void moveMouseToTab(ItemGroup group) {
+        if (MinecraftClient.getInstance().currentScreen instanceof CreativeInventoryScreen) {
+            int i = group.getColumn();
+            int x = 28 * i;
+            int y = 0;
+            int backgroundWidth = 195; // mystery constant yoinked from CreativeInventoryScreen
+            int backgroundHeight = 136; // mystery constant yoinked from CreativeInventoryScreen
+            if (group.isSpecial()) {
+                x = backgroundWidth - 28 * (6 - i) + 2;
+            } else if (i > 0) {
+                x += i;
+            }
+            y = group.isTopRow() ? (y -= 32) : (y += backgroundHeight);
+
+            x++;    // make sure coordinates inside tab
+            x += ((HandledScreenAccessor) MinecraftClient.getInstance().currentScreen).getX();
+            x *= (double) MinecraftClient.getInstance().getWindow().getWidth() / MinecraftClient.getInstance().getWindow().getScaledWidth();
+
+            y++;
+            y += ((HandledScreenAccessor) MinecraftClient.getInstance().currentScreen).getY();
+            y *= (double) MinecraftClient.getInstance().getWindow().getHeight() / MinecraftClient.getInstance().getWindow().getScaledHeight();
+
+            FakeMouse.fakeCursorMove(x, y);
+        } else {
+            // error
         }
     }
 

@@ -1,0 +1,13 @@
++inventory; -inventory
+tab building; +leftmouse; -leftmouse
+tab decoration; +leftmouse; -leftmouse
+tab redstone; +leftmouse; -leftmouse
+tab transportation; +leftmouse; -leftmouse
+tab hotbar; +leftmouse; -leftmouse
+tab search; +leftmouse; -leftmouse
+tab misc; +leftmouse; -leftmouse
+tab food; +leftmouse; -leftmouse
+tab tools; +leftmouse; -leftmouse
+tab combat; +leftmouse; -leftmouse
+tab brewing; +leftmouse; -leftmouse
+tab inventory; +leftmouse; -leftmouse

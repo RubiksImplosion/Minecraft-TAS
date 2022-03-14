@@ -26,7 +26,7 @@ public class ScriptCommand {
             .then(literal("load")
                 .then(argument("name", string())
                     .suggests(FileCompletion.fileList())
-                        .executes(ctx -> load(ctx.getSource(), getString(ctx, "name")))))
+                        .executes(ctx -> load(getString(ctx, "name")))))
             .then(literal("start")
                 .executes(ctx -> start(ctx.getSource())))
             .then(literal("stop")
@@ -39,16 +39,15 @@ public class ScriptCommand {
         return 0;
     }
 
-    public static int load(ServerCommandSource source, String name) {
-        int status = MinecraftTas.scriptManager.setScript(name, source);
+//    public static int load(ServerCommandSource source, String name) {
+    public static int load(String name) {
+        int status = MinecraftTas.scriptManager.setScript(name);
         if (status == 0) {
-            source.sendFeedback(new TranslatableText("commands.script.load.success", name), false);
+            InputUtil.sendFeedback(new TranslatableText("commands.script.load.success", name));
         } else if (status == 1) {
-            source.sendFeedback(new TranslatableText("commands.script.load.empty", name), false);
+            InputUtil.sendFeedback(new TranslatableText("commands.script.load.empty", name));
         } else if (status == 2) {
-            source.sendFeedback(new TranslatableText("commands.script.load.fail", name), false);
-        } else if (status == 3) {
-            // source.sendFeedback(new TranslatableText("commands.script.load.invalid", name), false);
+            InputUtil.sendFeedback(new TranslatableText("commands.script.load.fail", name));
         }
         return 0;
     }
