@@ -5,7 +5,6 @@ import io.github.rubiksimplosion.minecrafttas.input.FakeKeyboard;
 import io.github.rubiksimplosion.minecrafttas.input.FakeMouse;
 import io.github.rubiksimplosion.minecrafttas.mixin.HandledScreenAccessor;
 import io.github.rubiksimplosion.minecrafttas.mixin.KeyBindingAccessor;
-import io.github.rubiksimplosion.minecrafttas.mixin.MouseAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -14,8 +13,6 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.BaseText;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
@@ -83,7 +80,6 @@ public class InputUtil {
         }
     }
 
-    // moves cursor to a creative tabs
     public static void moveMouseToTab(ItemGroup group) {
         if (MinecraftClient.getInstance().currentScreen instanceof CreativeInventoryScreen) {
             int i = group.getColumn();
@@ -108,7 +104,8 @@ public class InputUtil {
 
             FakeMouse.fakeCursorMove(x, y);
         } else {
-            // error
+            InputUtil.sendError(new TranslatableText("error.execution.notCreative"));
+            MinecraftTas.scriptManager.stop();
         }
     }
 

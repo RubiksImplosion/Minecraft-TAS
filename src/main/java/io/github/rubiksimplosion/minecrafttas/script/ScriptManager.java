@@ -9,11 +9,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -36,11 +33,13 @@ public class ScriptManager {
     private int commandIndex = 0;
     private int waitTimer = 0;
     private int length = 0;
-    private final Queue<COMMAND_TYPES> keyInputQueue = new LinkedList<>();  // standard commands
+    private final Queue<COMMAND_TYPES> commandInputQueue = new LinkedList<>();  // standard commands
     private final Queue<COMMAND_TYPES> specialInputQueue = new LinkedList<>();  // always executed first
-    private final Queue<String> literalTextQueue = new LinkedList<>();  // used for simulating typing
-    private final Queue<ItemGroup> creativeTabQueue = new LinkedList<>(); // used for creative tabs
 
+    private final Queue<Integer> integerQueue = new LinkedList<>(); // used for mouse scrolling
+    private final Queue<String> stringQueue = new LinkedList<>();  // used for simulating typing
+    private final Queue<ItemGroup> itemGroupQueue = new LinkedList<>(); // used for creative tabs
+    private final Queue<Double> doubleQueue = new LinkedList<>();   // used for mouse scrolling and yaw/pitch
     private final Map<String, COMMAND_TYPES> commandToCommandType = new HashMap<>();
     private final Map<String, COMMAND_TYPES> specialToCommandType = new HashMap<>();
     private final Map<String, ItemGroup> stringToItemGroup = new HashMap<>();
@@ -208,11 +207,11 @@ public class ScriptManager {
         waitTimer = 0;
         modifiers = 0;
         length = 0;
-        keyInputQueue.clear();
+        commandInputQueue.clear();
         specialInputQueue.clear();
-        literalTextQueue.clear();
-        creativeTabQueue.clear();
-        InputUtil.getClientSidePlayerEntity().sendMessage(new TranslatableText("script.execution.finish"), false);
+        stringQueue.clear();
+        itemGroupQueue.clear();
+        InputUtil.sendFeedback(new TranslatableText("script.execution.finish"));
     }
 
     public void setupTick() {
@@ -245,8 +244,8 @@ public class ScriptManager {
                 case AUTO_JUMP_DISABLE -> InputUtil.disableAutoJump();
             }
         }
-        while (keyInputQueue.size() > 0) {
-            switch (keyInputQueue.remove()) {
+        while (commandInputQueue.size() > 0) {
+            switch (commandInputQueue.remove()) {
                 case ATTACK_PRESS -> InputUtil.pressAttack();
                 case ATTACK_RELEASE -> InputUtil.releaseAttack();
                 case USE_PRESS -> InputUtil.pressUse();
@@ -309,65 +308,77 @@ public class ScriptManager {
                 case HOTBAR_9_RELEASE -> InputUtil.releaseHotbar(9);
                 case ENTER_PRESS -> InputUtil.pressEnter();
                 case ENTER_RELEASE -> InputUtil.releaseEnter();
-                case TAB -> InputUtil.moveMouseToTab(creativeTabQueue.remove());
+                case TAB -> InputUtil.moveMouseToTab(itemGroupQueue.remove());
+                case YAW -> InputUtil.changeYaw(doubleQueue.remove());
+                case PITCH -> InputUtil.changePitch(doubleQueue.remove());
+                case SLOT -> InputUtil.moveMouseToSlot(integerQueue.remove());
+                case SCROLL_UP -> {
+                    int scrolls = integerQueue.remove();
+                    for (int i = 0; i < scrolls; i++) {
+                        FakeMouse.fakeMouseScroll(1.0);
+                    }
+                }
+                case SCROLL_DOWN -> {
+                    int scrolls = integerQueue.remove();
+                    for (int i = 0; i < scrolls; i++) {
+                        FakeMouse.fakeMouseScroll(-1.0);
+                    }
+                }
                 case TEXT -> {
-                    String text = literalTextQueue.remove();
+                    String text = stringQueue.remove();
                     for (char c : text.toCharArray()) {
                         InputUtil.typeLiteralChar(c);
                     }
                 }
                 default -> {
-                    InputUtil.getClientSidePlayerEntity().sendMessage(
-                            new TranslatableText("script.execute.unknown", commandIndex), false);
+                    InputUtil.sendError(new TranslatableText("error.execute.unknown", commandIndex));
                     stop();
                 }
             }
         }
     }
 
+    // adds the current instruction to the correct queue
     private void parseCommand(String command) {
         if (Pattern.matches("wait \\d+", command)) {
             waitTimer = Integer.parseInt(command.split(" ")[1]);
         }
-        //adds the current instruction to the correct queue
         if (commandToCommandType.containsKey(command)) {
-            keyInputQueue.add(commandToCommandType.get(command));
+            commandInputQueue.add(commandToCommandType.get(command));
         }
         else if (specialToCommandType.containsKey(command)) {
             specialInputQueue.add(specialToCommandType.get(command));
         }
-        //Mouse
         else if (Pattern.matches("yaw -?\\d+\\.?\\d*", command)) {
-            InputUtil.changeYaw(Double.parseDouble(command.split(" ")[1]));
+            doubleQueue.add(Double.parseDouble(command.split(" ")[1]));
+            commandInputQueue.add(COMMAND_TYPES.YAW);
         }
         else if (Pattern.matches("pitch -?\\d+\\.?\\d*", command)) {
-            InputUtil.changePitch(Double.parseDouble(command.split(" ")[1]));
+            doubleQueue.add(Double.parseDouble(command.split(" ")[1]));
+            commandInputQueue.add(COMMAND_TYPES.PITCH);
         }
         else if (Pattern.matches("scrollup \\d+", command)) {
-            for (int i = 0; i < Integer.parseInt(command.split(" ")[1]); i++) {
-                FakeMouse.fakeMouseScroll(1.0);
-            }
+            integerQueue.add(Integer.parseInt(command.split(" ")[1]));
+            commandInputQueue.add(COMMAND_TYPES.SCROLL_UP);
         }
         else if (Pattern.matches("scrolldown \\d+", command)) {
-            for (int i = 0; i < Integer.parseInt(command.split(" ")[1]); i++) {
-                FakeMouse.fakeMouseScroll(-1.0);
-            }
+            integerQueue.add(Integer.parseInt(command.split(" ")[1]));
+            commandInputQueue.add(COMMAND_TYPES.SCROLL_DOWN);
         }
         else if (Pattern.matches("slot \\d+", command)) {
-              InputUtil.moveMouseToSlot(Integer.parseInt(command.split(" ")[1]));
+            integerQueue.add(Integer.parseInt(command.split(" ")[1]));
+            commandInputQueue.add(COMMAND_TYPES.SLOT);
         }
         else if (Pattern.matches("load", command)) {
             MinecraftTas.savestateManager.loadSoftSavestate();
         }
         else if (Pattern.matches("text \".*\"", command)) {
-            String text = command.substring(6, command.length() - 1);
-            literalTextQueue.add(text);
-            keyInputQueue.add(COMMAND_TYPES.TEXT);
+            stringQueue.add(command.substring(6, command.length() - 1));
+            commandInputQueue.add(COMMAND_TYPES.TEXT);
         }
         else if (Pattern.matches("tab .+", command)) {
-            String tab = command.split(" ")[1];
-            creativeTabQueue.add(stringToItemGroup.get(tab));
-            keyInputQueue.add(COMMAND_TYPES.TAB);
+            itemGroupQueue.add(stringToItemGroup.get(command.split(" ")[1]));
+            commandInputQueue.add(COMMAND_TYPES.TAB);
         }
     }
 

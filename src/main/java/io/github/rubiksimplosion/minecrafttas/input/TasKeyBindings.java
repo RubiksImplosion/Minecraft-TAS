@@ -102,9 +102,7 @@ public class TasKeyBindings {
 
     public static void onKeyScriptStopPressed() {
         if (MinecraftTas.scriptManager.executing) {
-//            MinecraftClient.getInstance().player.sendMessage(new LiteralText("Stopped executing script"), false);
-            io.github.rubiksimplosion.minecrafttas.util.InputUtil.getClientSidePlayerEntity().sendMessage(
-                    new TranslatableText("script.execution.stop"), false);
+            io.github.rubiksimplosion.minecrafttas.util.InputUtil.sendFeedback(new TranslatableText("script.execution.stop"));
             MinecraftTas.scriptManager.stop();
         }
     }
@@ -112,12 +110,10 @@ public class TasKeyBindings {
     public static void onKeyScriptStartPressed() {
         if (!MinecraftTas.scriptManager.executing) {
             if (MinecraftTas.scriptManager.isScriptLoaded()) {
-                io.github.rubiksimplosion.minecrafttas.util.InputUtil.getClientSidePlayerEntity().sendMessage(
-                        new TranslatableText("script.execution.start"), false);
+                io.github.rubiksimplosion.minecrafttas.util.InputUtil.sendFeedback(new TranslatableText("script.execution.start"));
                 MinecraftTas.scriptManager.start();
             } else {
-                io.github.rubiksimplosion.minecrafttas.util.InputUtil.getClientSidePlayerEntity().sendMessage(
-                        new TranslatableText("error.scriptNotLoaded"), false);
+                io.github.rubiksimplosion.minecrafttas.util.InputUtil.sendError(new TranslatableText("error.scriptNotLoaded"));
             }
         }
     }

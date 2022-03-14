@@ -21,11 +21,9 @@ public class SavestateManager {
     public void addSoftSavestate(PlayerState state) {
         if (MinecraftClient.getInstance().isInSingleplayer()) {
             softSavestates.add(state);
-            InputUtil.getClientSidePlayerEntity().sendMessage(
-                    new TranslatableText("savestate.create", softSavestates.size()), false);
+            InputUtil.sendFeedback(new TranslatableText("savestate.create", softSavestates.size()));
         } else {
-            InputUtil.getClientSidePlayerEntity().sendMessage(
-                    new TranslatableText("error.savestate.multiplayer"), false);
+            InputUtil.sendFeedback(new TranslatableText("error.savestate.multiplayer"));
         }
     }
 
@@ -53,23 +51,18 @@ public class SavestateManager {
             player.getStackReference(99).set(state.inventory_offhand.copy());
             player.currentScreenHandler.sendContentUpdates();
 
-            InputUtil.getClientSidePlayerEntity().sendMessage(
-                    new TranslatableText("savestate.load", softSavestates.size()), false);
+            InputUtil.sendFeedback(new TranslatableText("savestate.load", softSavestates.size()));
         } else {
-            InputUtil.getClientSidePlayerEntity().sendMessage(
-                    new TranslatableText("error.savestate.load.empty"), false);
+            InputUtil.sendError(new TranslatableText("error.savestate.load.empty"));
         }
     }
 
     public void removeSoftSavestate() {
         if (softSavestates.size() > 0) {
             softSavestates.remove(softSavestates.size() - 1);
-            InputUtil.getClientSidePlayerEntity().sendMessage(
-                    new TranslatableText("Save-state #%s deleted.", softSavestates.size() + 1), false);
+            InputUtil.sendFeedback(new TranslatableText("savestate.remove", softSavestates.size() + 1));
         } else {
-            InputUtil.getClientSidePlayerEntity().sendMessage(
-                    new TranslatableText("error.savestate.remove.empty"), false);
+            InputUtil.sendError(new TranslatableText("error.savestate.remove.empty"));
         }
     }
-
 }

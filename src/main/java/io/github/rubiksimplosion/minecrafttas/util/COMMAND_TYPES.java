@@ -68,5 +68,8 @@ public enum COMMAND_TYPES {
     HOTBAR_8_RELEASE,
     HOTBAR_9_RELEASE,
     TEXT,
-    TAB
+    TAB,
+    SCROLL_UP,
+    SCROLL_DOWN,
+    SLOT
 }

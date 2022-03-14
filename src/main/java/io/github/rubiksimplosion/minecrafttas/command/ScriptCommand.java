@@ -21,8 +21,8 @@ public class ScriptCommand {
         addClientSideCommand("script");
 
         dispatcher.register(literal("script")
-            .then(literal("test")
-                .executes(ctx -> test(ctx.getSource())))
+//            .then(literal("test")
+//                .executes(ctx -> test(ctx.getSource())))
             .then(literal("load")
                 .then(argument("name", string())
                     .suggests(FileCompletion.fileList())
