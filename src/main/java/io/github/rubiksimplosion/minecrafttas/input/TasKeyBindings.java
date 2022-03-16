@@ -1,7 +1,6 @@
 package io.github.rubiksimplosion.minecrafttas.input;
 
 import io.github.rubiksimplosion.minecrafttas.MinecraftTas;
-import io.github.rubiksimplosion.minecrafttas.util.PlayerState;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -45,11 +44,11 @@ public class TasKeyBindings {
             "key.category.tas"));
 
     public static void registerKeys() {
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            while (keyTasTest.wasPressed()) {
-                onKeyTasTestPressed();
-            }
-        });
+//        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+//            while (keyTasTest.wasPressed()) {
+//                onKeyTasTestPressed();
+//            }
+//        });
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (keyScriptStart.wasPressed()) {
                 onKeyScriptStartPressed();
@@ -78,31 +77,26 @@ public class TasKeyBindings {
     }
 
     public static void onKeyDeleteSavestatePressed() {
-        MinecraftTas.savestateManager.removeSoftSavestate();
+        MinecraftTas.savestateManager.removeMostRecentSavestate();
+//        MinecraftTas.savestateManager.loadSoftSavetateFromFile("temp");
     }
 
     public static void onKeyCreateSavestatePressed() {
-//        MinecraftTas.savestateManager.addSoftSavestate(new PlayerState(MinecraftClient.getInstance().player));
-        MinecraftTas.savestateManager.addSoftSavestate(
-                new PlayerState(io.github.rubiksimplosion.minecrafttas.util.InputUtil.getServerSidePlayerEntity()));
+        MinecraftTas.savestateManager.addQuickSoftSavestate();
     }
 
     public static void onKeyLoadSavestatePressed() {
-        MinecraftTas.savestateManager.loadSoftSavestate();
+        MinecraftTas.savestateManager.loadMostRecentSavestate();
     }
 
 
     public static void onKeyTasTestPressed() {
-//        MinecraftClient.getInstance().player.sendMessage(new LiteralText(ScriptManager.scriptDirectory.getPath()), false);
-//        io.github.rubiksimplosion.minecrafttas.util.InputUtil.pressChat();
-//        io.github.rubiksimplosion.minecrafttas.util.InputUtil.releaseChat();
-//        io.github.rubiksimplosion.minecrafttas.util.InputUtil.typeLiteralChar('t');
-//        KeyboardAccessor
+        MinecraftTas.savestateManager.saveSoftSavestateToFile("temp");
     }
 
     public static void onKeyScriptStopPressed() {
         if (MinecraftTas.scriptManager.executing) {
-            io.github.rubiksimplosion.minecrafttas.util.InputUtil.sendFeedback(new TranslatableText("script.execution.stop"));
+            io.github.rubiksimplosion.minecrafttas.util.InputUtil.sendFeedback(new TranslatableText("execution.stop"));
             MinecraftTas.scriptManager.stop();
         }
     }
@@ -110,7 +104,7 @@ public class TasKeyBindings {
     public static void onKeyScriptStartPressed() {
         if (!MinecraftTas.scriptManager.executing) {
             if (MinecraftTas.scriptManager.isScriptLoaded()) {
-                io.github.rubiksimplosion.minecrafttas.util.InputUtil.sendFeedback(new TranslatableText("script.execution.start"));
+                io.github.rubiksimplosion.minecrafttas.util.InputUtil.sendFeedback(new TranslatableText("execution.start"));
                 MinecraftTas.scriptManager.start();
             } else {
                 io.github.rubiksimplosion.minecrafttas.util.InputUtil.sendError(new TranslatableText("error.scriptNotLoaded"));

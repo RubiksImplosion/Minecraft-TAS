@@ -26,16 +26,21 @@ Some features I would like to eventually implement (in no particular order):
    and move it to the mods folder (`.minecraft/mods`).
    
 ## Usage
+### Scripts:
 1. Create a text document in the `.minecraft/scripts` folder and rename the extension to ".script"
 2. Add the commands in chronological order. Each new line is executed 1 tick after the previous line. Example scipts can be found in the scripts folder
 3. Load scripts with the `/script load <script name>` command, it will autocomplete the names of valid script files
 4. Start scripts with the `/script start` command, or by pressing the start script keybind (default `O`)
 5. Stop scripts with the `/script stop` command, or by pressing the stop script keybind (default `P`)
-6. Create a save-state by pressing the create save-state keybind (default `J`)
-7. Load a save-state by pressing the load save-state keybind (default `K`)
-8. Delete a save-state by pressing the delete save-state keybind (default `'`/`APOSTROPHE`)
 
 For example scripts, see the `run/scripts` folder above
+### Save-states:
+1. Create a save-state by pressing the create save-state keybind (default `J`)
+2. Load a save-state by pressing the load save-state keybind (default `K`)
+3. Delete a save-state by pressing the delete save-state keybind (default `'`/`APOSTROPHE`)
+4. Save the most-recently accessed save-state to a file with the `/savestate save <file name>` command.
+5. Load a save-state from a file with the `/savestate load <file name> command`.
+
 ### Available commands:
  
  `wait <ticks>` pauses execution of the script for the given number of ticks 
@@ -52,9 +57,13 @@ For example scripts, see the `run/scripts` folder above
 
 `slot <id>` - Moves the mouse over the given slot in an inventory.
 
-`load` - Loads the most recent save-state
+`load [savestate]` - Loads the most recent save-state, or the named save-state if a name is given.
 
 `text "<value>"` - Types the given text into the current screen. Quotes around the text are mandatory.
+
+`tab <creative tab>` - Moves the mouse over the given tab in the creative inventory. 
+Valid tab names are "building", "decoration", "redstone", "transportation", "hotbar", "search", 
+"misc", "food", "tools", "combat", "brewing", and "inventory".
 
 `+attack|-attack` - Presses and releases the Attack/Destroy key respectively
 
@@ -102,8 +111,9 @@ For example scripts, see the `run/scripts` folder above
 
 `+enter|-enter` - Presses and releases enter respectively
 
-Insert a semicolon `;` between commands on the same line to execute them both on the same tick
-For example, the command `+forward; +sprint` would begin pressing forward and sprint on the same tick.
+Insert a semicolon `;` between commands on the same line to execute them both sequentially on the same tick
+For example, the command `+forward; +sprint` would begin pressing forward, followed by sprint on the same tick, and 
+`slot 0; slot 1; slot 2; slot 3` would move the mouse cursor over slots 0, 1, 2, and 3 in that order and in the same tick.
 
 For a list of slot ids, visit https://wiki.vg/Inventory
 

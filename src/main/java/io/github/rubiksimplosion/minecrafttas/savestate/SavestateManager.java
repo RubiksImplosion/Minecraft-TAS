@@ -1,68 +1,134 @@
 package io.github.rubiksimplosion.minecrafttas.savestate;
 
+import io.github.rubiksimplosion.minecrafttas.mixin.MinecraftClientAccessor;
+import io.github.rubiksimplosion.minecrafttas.mixin.MinecraftServerAccessor;
 import io.github.rubiksimplosion.minecrafttas.util.InputUtil;
-import io.github.rubiksimplosion.minecrafttas.util.PlayerState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.level.storage.LevelStorage;
 
+import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SavestateManager {
-    public List<PlayerState> softSavestates = new ArrayList<>();
+    public File saveStatesDirectory;
+    private final List<PlayerState> softSavestateStack = new ArrayList<>();   // created from key bind
+    private final Map<String, PlayerState> namedSoftSavestates = new HashMap<>();   // loaded from file
 
-    public void addSoftSavestate(PlayerState state) {
+    public void addQuickSoftSavestate() {
         if (MinecraftClient.getInstance().isInSingleplayer()) {
-            softSavestates.add(state);
-            InputUtil.sendFeedback(new TranslatableText("savestate.create", softSavestates.size()));
+            PlayerState currentState = new PlayerState(InputUtil.getClientSidePlayerEntity(), InputUtil.getServerSidePlayerEntity());
+            softSavestateStack.add(currentState);
+            InputUtil.sendFeedback(new TranslatableText("savestate.create", softSavestateStack.size()));
         } else {
             InputUtil.sendFeedback(new TranslatableText("error.savestate.multiplayer"));
         }
     }
 
-    //TODO: make loading savestate in different dimensions consistent
-    //TODO: make "hard" savestates
-    public void loadSoftSavestate() {
-        if (softSavestates.size() > 0) {
-            PlayerState state = softSavestates.get(softSavestates.size()-1);
-            ServerPlayerEntity player = InputUtil.getServerSidePlayerEntity();
-            player.teleport(state.world, state.position.x, state.position.y, state.position.z, state.yaw, state.pitch);
-            player.setVelocity(state.velocity);
-            player.setVelocityClient(state.velocity.x, state.velocity.y, state.velocity.z);
-            player.velocityModified = true;
-            player.velocityDirty = true;
-
-            // inventory = 0..35
-            for (int i = 0; i < state.inventory_main.length; i++) {
-                player.getStackReference(i).set(state.inventory_main[i].copy());
-            }
-            // head,chest,leg,feet = 103,102,101,100
-            for (int i = 0; i < state.inventory_armor.length; i++) {
-                player.getStackReference(100+i).set(state.inventory_armor[i].copy());
-            }
-            //offhand = 99
-            player.getStackReference(99).set(state.inventory_offhand.copy());
-            player.currentScreenHandler.sendContentUpdates();
-
-            InputUtil.sendFeedback(new TranslatableText("savestate.load", softSavestates.size()));
+    public void loadMostRecentSavestate() {
+        if (softSavestateStack.size() > 0) {
+            PlayerState state = softSavestateStack.get(softSavestateStack.size() - 1);
+            ServerPlayerEntity serverPlayer = InputUtil.getServerSidePlayerEntity();
+            ClientPlayerEntity clientPlayer = InputUtil.getClientSidePlayerEntity();
+            serverPlayer.readNbt(state.serverPlayerState);
+            clientPlayer.readNbt(state.serverPlayerState);
+            InputUtil.sendFeedback(new TranslatableText("savestate.load.recent"));
         } else {
             InputUtil.sendError(new TranslatableText("error.savestate.load.empty"));
         }
     }
 
-    public void removeSoftSavestate() {
-        if (softSavestates.size() > 0) {
-            softSavestates.remove(softSavestates.size() - 1);
-            InputUtil.sendFeedback(new TranslatableText("savestate.remove", softSavestates.size() + 1));
+    public void removeMostRecentSavestate() {
+        if (softSavestateStack.size() > 0) {
+            softSavestateStack.remove(softSavestateStack.size() - 1);
+            InputUtil.sendFeedback(new TranslatableText("savestate.remove.recent"));
         } else {
             InputUtil.sendError(new TranslatableText("error.savestate.remove.empty"));
         }
+    }
+
+   // saves most recent save-state to file
+    public void saveSoftSavestateToFile(String fileName) {
+        try {
+            if (softSavestateStack.size() > 0) {
+                PlayerState state = softSavestateStack.get(softSavestateStack.size() - 1);
+                state.save(getSavestateFile(fileName));
+                InputUtil.sendFeedback(new TranslatableText("savestate.file.save", fileName));
+            } else {
+                InputUtil.sendError(new TranslatableText("error.savestate.file.save.empty"));
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadNamedSoftSavestate(String name) {
+        try {
+            PlayerState state = namedSoftSavestates.get(name);
+            if (state == null) {
+                InputUtil.sendError(new TranslatableText("error.savestate.file.load.notExists", name));
+                return;
+            }
+            ServerPlayerEntity serverPlayer = InputUtil.getServerSidePlayerEntity();
+            ClientPlayerEntity clientPlayer = InputUtil.getClientSidePlayerEntity();
+            serverPlayer.readNbt(state.serverPlayerState);
+            clientPlayer.readNbt(state.serverPlayerState);
+            softSavestateStack.add(state);
+            InputUtil.sendFeedback(new TranslatableText("savestate.file.load", name));
+        }
+        catch (Exception e) {
+            InputUtil.sendError(new TranslatableText("error.savestate.load"));
+        }
+    }
+
+    public void loadSoftSavetateFromFile(String fileName) {
+        try {
+            File saveStateFile = getSavestateFile(fileName);
+            if (saveStateFile.exists()) {
+                PlayerState state = new PlayerState();
+                state.load(getSavestateFile(fileName));
+                namedSoftSavestates.put(fileName, state);
+                softSavestateStack.add(state);
+                ServerPlayerEntity serverPlayer = InputUtil.getServerSidePlayerEntity();
+                ClientPlayerEntity clientPlayer = InputUtil.getClientSidePlayerEntity();
+                serverPlayer.readNbt(state.serverPlayerState);
+                clientPlayer.readNbt(state.serverPlayerState);
+                InputUtil.sendFeedback(new TranslatableText("savestate.file.load", fileName));
+            }
+            else {
+                InputUtil.sendError(new TranslatableText("error.savestate.file.notExists", fileName+".savestate"));
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public File getSavestateFile(String fileName) {
+        String filePath = saveStatesDirectory.getAbsolutePath() + System.getProperty("file.separator") + fileName + ".savestate";
+        return new File(filePath);
+    }
+    // find a better way to get the world name cus this is nasty
+    public void initializeSavestateDirectory() {
+        LevelStorage.Session session = ((MinecraftServerAccessor)((((MinecraftClientAccessor) MinecraftClient.getInstance()).getServer()))).getSession();
+        String worldName = session.getDirectoryName();
+        File saveStatesDirectory = new File(
+                MinecraftClient.getInstance().runDirectory.getPath()
+                        + System.getProperty("file.separator")
+                        + "saves"
+                        + System.getProperty("file.separator")
+                        + worldName
+                        + System.getProperty("file.separator")
+                        + "savestates");
+        if (!saveStatesDirectory.exists()) {
+            saveStatesDirectory.mkdir();
+        }
+        this.saveStatesDirectory = saveStatesDirectory;
     }
 }

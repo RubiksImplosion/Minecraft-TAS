@@ -1,14 +1,19 @@
 package io.github.rubiksimplosion.minecrafttas.mixin;
 
 import io.github.rubiksimplosion.minecrafttas.MinecraftTas;
+import io.github.rubiksimplosion.minecrafttas.savestate.SavestateManager;
 import io.github.rubiksimplosion.minecrafttas.util.InputUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.server.SaveLoader;
+import net.minecraft.world.level.storage.LevelStorage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.function.Function;
 
 @Environment(EnvType.CLIENT)
 @Mixin(MinecraftClient.class)
@@ -30,6 +35,10 @@ public class MixinMinecraftClient {
         }
     }
 
+    @Inject(method = "startIntegratedServer(Ljava/lang/String;)V", at = @At("RETURN"))
+    private void createSavestateDirectory(String worldName, CallbackInfo ci) {
+        MinecraftTas.savestateManager.initializeSavestateDirectory();
+    }
 //    @Inject(method = "tick", at = @At("RETURN"))
 //    private void onTickEnd(CallbackInfo ci) {
 //        if (MinecraftTas.scriptManager.executing) {

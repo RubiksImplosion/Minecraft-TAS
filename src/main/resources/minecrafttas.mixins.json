@@ -6,6 +6,8 @@
     "HandledScreenAccessor",
     "KeyBindingAccessor",
     "KeyboardAccessor",
+    "MinecraftClientAccessor",
+    "MinecraftServerAccessor",
     "MixinClientPlayerEntity",
     "MixinClientPlayNetworkHandler",
     "MixinCommandSuggestor",

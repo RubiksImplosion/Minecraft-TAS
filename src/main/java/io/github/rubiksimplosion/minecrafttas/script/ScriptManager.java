@@ -2,7 +2,6 @@ package io.github.rubiksimplosion.minecrafttas.script;
 
 import io.github.rubiksimplosion.minecrafttas.MinecraftTas;
 import io.github.rubiksimplosion.minecrafttas.input.FakeMouse;
-//import io.github.rubiksimplosion.minecrafttas.mixin.MinecraftClientAccessor;
 import io.github.rubiksimplosion.minecrafttas.util.COMMAND_TYPES;
 import io.github.rubiksimplosion.minecrafttas.util.InputUtil;
 import net.fabricmc.api.EnvType;
@@ -149,7 +148,7 @@ public class ScriptManager {
                         }
                         if (Pattern.matches("tab .+", command)) {
                             if (stringToItemGroup.get(command.split(" ")[1]) == null) {
-                                InputUtil.sendError(new TranslatableText("commands.script.load.invalidTab", scriptName, command, i + 1));
+                                InputUtil.sendError(new TranslatableText("error.command.load.invalidTab", scriptName, command, i + 1));
                                 for (String key : stringToItemGroup.keySet()) {
                                     InputUtil.sendError(new LiteralText("  " + key));
                                 }
@@ -168,11 +167,11 @@ public class ScriptManager {
 //                                Pattern.matches("\\+hotbar\\d", command) ||
 //                                Pattern.matches("-hotbar\\d", command) ||
                                 Pattern.matches("slot \\d+", command) ||
-                                Pattern.matches("load", command) ||
+                                Pattern.matches("load.*", command) ||
                                 Pattern.matches("text \".*\"", command) ||
                                 Pattern.matches("tab .+", command)))
                         {
-                            InputUtil.sendError(new TranslatableText("commands.script.load.invalid", scriptName, command, i + 1));
+                            InputUtil.sendError(new TranslatableText("error.command.load.invalid", scriptName, command, i + 1));
                             script = null;
                             length = 0;
                             return 3; // invalid command
@@ -211,7 +210,7 @@ public class ScriptManager {
         specialInputQueue.clear();
         stringQueue.clear();
         itemGroupQueue.clear();
-        InputUtil.sendFeedback(new TranslatableText("script.execution.finish"));
+        InputUtil.sendFeedback(new TranslatableText("execution.finish"));
     }
 
     public void setupTick() {
@@ -369,8 +368,12 @@ public class ScriptManager {
             integerQueue.add(Integer.parseInt(command.split(" ")[1]));
             commandInputQueue.add(COMMAND_TYPES.SLOT);
         }
-        else if (Pattern.matches("load", command)) {
-            MinecraftTas.savestateManager.loadSoftSavestate();
+        else if (Pattern.matches("load.*", command)) {
+            if (command.split(" ").length > 1 && command.split(" ")[1].length() > 0) {
+                MinecraftTas.savestateManager.loadNamedSoftSavestate(command.split(" ")[1]);
+            } else {
+                MinecraftTas.savestateManager.loadMostRecentSavestate();
+            }
         }
         else if (Pattern.matches("text \".*\"", command)) {
             stringQueue.add(command.substring(6, command.length() - 1));

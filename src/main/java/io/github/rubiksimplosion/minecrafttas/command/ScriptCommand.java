@@ -19,18 +19,30 @@ import static net.minecraft.server.command.CommandManager.*;
 public class ScriptCommand {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         addClientSideCommand("script");
-
         dispatcher.register(literal("script")
-//            .then(literal("test")
-//                .executes(ctx -> test(ctx.getSource())))
             .then(literal("load")
                 .then(argument("name", string())
-                    .suggests(FileCompletion.fileList())
-                        .executes(ctx -> load(getString(ctx, "name")))))
+                    .suggests(FileCompletion.scriptFileList())
+                        .executes(ctx -> loadScript(getString(ctx, "name")))))
             .then(literal("start")
-                .executes(ctx -> start(ctx.getSource())))
+                .executes(ctx -> start()))
             .then(literal("stop")
-                .executes(ctx -> stop(ctx.getSource()))));
+                .executes(ctx -> stop())));
+
+        addClientSideCommand("savestate");
+        dispatcher.register(literal("savestate")
+            .then(literal("save")
+                .then(argument("name", string())
+                    .executes(ctx -> save(getString(ctx, "name")))))
+            .then(literal("load")
+                .then(argument("name", string())
+                    .suggests(FileCompletion.savestateFileList())
+                        .executes(ctx -> loadSaveState(getString(ctx, "name"))))));
+    }
+
+    public static int loadSaveState(String name) {
+        MinecraftTas.savestateManager.loadSoftSavetateFromFile(name);
+        return 0;
     }
 
     public static int test(ServerCommandSource source) {
@@ -38,28 +50,31 @@ public class ScriptCommand {
                 new LiteralText(ScriptManager.scriptDirectory.toString()), false);
         return 0;
     }
+    public static int save(String name) {
+        MinecraftTas.savestateManager.saveSoftSavestateToFile(name);
+        return 0;
+    }
 
-//    public static int load(ServerCommandSource source, String name) {
-    public static int load(String name) {
+    public static int loadScript(String name) {
         int status = MinecraftTas.scriptManager.setScript(name);
         if (status == 0) {
-            InputUtil.sendFeedback(new TranslatableText("commands.script.load.success", name));
+            InputUtil.sendFeedback(new TranslatableText("command.load.success", name));
         } else if (status == 1) {
-            InputUtil.sendFeedback(new TranslatableText("commands.script.load.empty", name));
+            InputUtil.sendError(new TranslatableText("error.command.load.empty", name));
         } else if (status == 2) {
-            InputUtil.sendFeedback(new TranslatableText("commands.script.load.fail", name));
+            InputUtil.sendError(new TranslatableText("error.command.load.fail", name));
         }
         return 0;
     }
 
-    public static int start(ServerCommandSource source) {
-        source.sendFeedback(new TranslatableText("commands.script.start"), false);
+    public static int start() {
+        InputUtil.sendFeedback(new TranslatableText("command.start"));
         MinecraftTas.scriptManager.start();
         return 0;
     }
 
-    public static int stop(ServerCommandSource source) {
-        source.sendFeedback(new TranslatableText("commands.script.stop"), false);
+    public static int stop() {
+        InputUtil.sendFeedback(new TranslatableText("command.stop"));
         MinecraftTas.scriptManager.stop();
         return 0;
     }
