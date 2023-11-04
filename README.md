@@ -1,3 +1,13 @@
+# This project is abandoned
+I do not actively develop this anymore nor do I have any plans to start developing it again in the foreseeable future. If I ever decide to start developing this again, it will likely be rewritten from the ground up.
+
+If you are looking for more up to date playback TAS mods, check out the following:
+
+https://github.com/kurrycat2004/MPKMod_2
+
+https://github.com/MinecraftTAS/TASmod
+
+
 # Minecraft-TAS
 The goal of this mod is to allow for "emulator-style" TASes of Minecraft to be created; I.E having script files be created and replayed back as if the keys were actually being pressed on a real keyboard.
 
